@@ -19,7 +19,7 @@ public class Saw {
     private static final String PREVIOUS_APP_VERSION_KEY = "previousAppVersion";
     private static PersistedSeenSet appInstallSeen;
     private static PersistedSeenSet appVersionSeen;
-    private static Set<String> appRunSeen = new HashSet<>();
+    private static Set<String> appRunSeen;
     private static SharedPreferences sharedPreferences;
 
     private Saw() {
@@ -29,6 +29,7 @@ public class Saw {
         sharedPreferences = context.getSharedPreferences("SawPreferences", Context.MODE_PRIVATE);
         appInstallSeen = new PersistedSeenSet(sharedPreferences, "appInstall");
         appVersionSeen = new PersistedSeenSet(sharedPreferences, "appVersion");
+        appRunSeen = new HashSet<>();
 
         if (isNewAppVersion()) {
             appVersionSeen.clear();
