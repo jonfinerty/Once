@@ -17,13 +17,13 @@ public class OnceTests {
 
         String unseenTag = "unseen tag";
 
-        boolean seenThisInstall = Once.hasSeen(unseenTag, Once.SCOPE_APP_INSTALL);
+        boolean seenThisInstall = Once.beenDone(Once.THIS_APP_INSTALL, unseenTag);
         Assert.assertFalse(seenThisInstall);
 
-        boolean seenThisAppVersion = Once.hasSeen(unseenTag, Once.SCOPE_APP_VERSION);
+        boolean seenThisAppVersion = Once.beenDone(Once.THIS_APP_VERSION, unseenTag);
         Assert.assertFalse(seenThisAppVersion);
 
-        boolean seenThisRun = Once.hasSeen(unseenTag, Once.SCOPE_APP_RUN);
+        boolean seenThisRun = Once.beenDone(Once.THIS_APP_RUN, unseenTag);
         Assert.assertFalse(seenThisRun);
     }
 
@@ -33,15 +33,15 @@ public class OnceTests {
 
         String tag = "seen tag";
 
-        Once.markSeen(tag);
+        Once.markDone(tag);
 
-        boolean seenThisInstall = Once.hasSeen(tag, Once.SCOPE_APP_INSTALL);
+        boolean seenThisInstall = Once.beenDone(Once.THIS_APP_INSTALL, tag);
         Assert.assertTrue(seenThisInstall);
 
-        boolean seenThisAppVersion = Once.hasSeen(tag, Once.SCOPE_APP_VERSION);
+        boolean seenThisAppVersion = Once.beenDone(Once.THIS_APP_VERSION, tag);
         Assert.assertTrue(seenThisAppVersion);
 
-        boolean seenThisRun = Once.hasSeen(tag, Once.SCOPE_APP_RUN);
+        boolean seenThisRun = Once.beenDone(Once.THIS_APP_RUN, tag);
         Assert.assertTrue(seenThisRun);
     }
 
@@ -50,18 +50,18 @@ public class OnceTests {
         Once.initialise(RuntimeEnvironment.application);
 
         String tag = "seen tag";
-        Once.markSeen(tag);
+        Once.markDone(tag);
 
         // Is there a better way to simulate an app restart?
         Once.initialise(RuntimeEnvironment.application);
 
-        boolean seenThisInstall = Once.hasSeen(tag, Once.SCOPE_APP_INSTALL);
+        boolean seenThisInstall = Once.beenDone(Once.THIS_APP_INSTALL, tag);
         Assert.assertTrue(seenThisInstall);
 
-        boolean seenThisAppVersion = Once.hasSeen(tag, Once.SCOPE_APP_VERSION);
+        boolean seenThisAppVersion = Once.beenDone(Once.THIS_APP_VERSION, tag);
         Assert.assertTrue(seenThisAppVersion);
 
-        boolean seenThisRun = Once.hasSeen(tag, Once.SCOPE_APP_RUN);
+        boolean seenThisRun = Once.beenDone(Once.THIS_APP_RUN, tag);
         Assert.assertFalse(seenThisRun);
     }
 

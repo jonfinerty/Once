@@ -11,9 +11,9 @@ import java.util.Set;
 
 public class Once {
 
-    public static final int SCOPE_APP_INSTALL = 0;
-    public static final int SCOPE_APP_VERSION = 1;
-    public static final int SCOPE_APP_RUN = 2;
+    public static final int THIS_APP_INSTALL = 0;
+    public static final int THIS_APP_VERSION = 1;
+    public static final int THIS_APP_RUN = 2;
 
     private static final int NO_PREVIOUS_APP_VERSION = -1;
     private static final String PREVIOUS_APP_VERSION_KEY = "previousAppVersion";
@@ -49,13 +49,13 @@ public class Once {
         return previousAppVersion != NO_PREVIOUS_APP_VERSION && previousAppVersion != BuildConfig.VERSION_CODE;
     }
 
-    public static boolean hasSeen(String tag, @Scope int seenScope) {
+    public static boolean beenDone(@Scope int doneScope, String tag) {
 
         if (appRunSeen.contains(tag)) {
             return true;
         }
 
-        if (seenScope == SCOPE_APP_RUN) {
+        if (doneScope == THIS_APP_RUN) {
             return false;
         }
 
@@ -63,7 +63,7 @@ public class Once {
             return true;
         }
 
-        if (seenScope == SCOPE_APP_VERSION) {
+        if (doneScope == THIS_APP_VERSION) {
             return false;
         }
 
@@ -74,14 +74,14 @@ public class Once {
         return false;
     }
 
-    public static void markSeen(String tag) {
+    public static void markDone(String tag) {
         appInstallSeen.add(tag);
         appVersionSeen.add(tag);
         appRunSeen.add(tag);
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({SCOPE_APP_INSTALL, SCOPE_APP_VERSION, SCOPE_APP_RUN})
+    @IntDef({THIS_APP_INSTALL, THIS_APP_VERSION, THIS_APP_RUN})
     public @interface Scope {
     }
 
