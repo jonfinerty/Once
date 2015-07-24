@@ -21,11 +21,11 @@ Once.initialise(this);
 Now you're ready to go. Say you wanted to navigate to a 'WhatsNew' Activity every time your app is upgraded:
 
 ```java
-String whatsNew = "WhatsNew";
+String showWhatsNew = "showWhatsNewTag";
 
-if (!Once.beenDone(Once.THIS_APP_VERSION, whatsNew)) {
+if (!beenDone(THIS_APP_VERSION, showWhatsNew)) {
     startActivity(this, WhatsNewActivity.class);
-    Once.markDone(whatsNew);
+    markDone(showWhatsNew);
 }
 ```
 

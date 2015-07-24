@@ -19,9 +19,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         if (!beenDone(THIS_APP_INSTALL, SHOW_FRESH_INSTALL_DIALOG)) {
-
             showFreshInstallDialog();
-
             markDone(SHOW_FRESH_INSTALL_DIALOG);
         }
 
