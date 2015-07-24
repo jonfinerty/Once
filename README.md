@@ -3,7 +3,7 @@ A small Android library to manage one-off operations.
 
 ----
 
-Some things should happen once.
+Some things should happen **once**.
 * Users should only get the guided tour _once_. 
 * Release notes should only pop up _once every app upgrade_. 
 * Your app should only phone home to update content _once every hour_.
@@ -31,6 +31,10 @@ if (!Once.beenDone(Once.THIS_APP_VERSION, whatsNew)) {
 
 ## Installation
 
+
+## Example
+
+Have a look at the example app in `once-example/` for more simple usage.
 
 ## License
 

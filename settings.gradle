@@ -1,1 +1,1 @@
-include ':once'
+include ':once', ':once-example'
