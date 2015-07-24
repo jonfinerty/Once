@@ -1,4 +1,4 @@
-package jonathanfinerty.saw;
+package jonathanfinerty.once;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Saw {
+public class Once {
 
     public static final int SCOPE_APP_INSTALL = 0;
     public static final int SCOPE_APP_VERSION = 1;
@@ -22,11 +22,11 @@ public class Saw {
     private static Set<String> appRunSeen;
     private static SharedPreferences sharedPreferences;
 
-    private Saw() {
+    private Once() {
     }
 
     public static void initialise(Context context) {
-        sharedPreferences = context.getSharedPreferences("SawPreferences", Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences("oncePreferences", Context.MODE_PRIVATE);
         appInstallSeen = new PersistedSeenSet(sharedPreferences, "appInstall");
         appVersionSeen = new PersistedSeenSet(sharedPreferences, "appVersion");
         appRunSeen = new HashSet<>();
