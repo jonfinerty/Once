@@ -1,20 +1,25 @@
 package jonathanfinerty.once;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
-@RunWith(RobolectricGradleTestRunner.class)
+import java.util.concurrent.TimeUnit;
+
+@RunWith(TestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 public class OnceTests {
 
+    @Before
+    public void Setup() {
+        Once.initialise(RuntimeEnvironment.application);
+    }
+
     @Test
     public void unseenTags() {
-        Once.initialise(RuntimeEnvironment.application);
-
         String unseenTag = "unseen tag";
 
         boolean seenThisInstall = Once.beenDone(Once.THIS_APP_INSTALL, unseenTag);
@@ -23,16 +28,13 @@ public class OnceTests {
         boolean seenThisAppVersion = Once.beenDone(Once.THIS_APP_VERSION, unseenTag);
         Assert.assertFalse(seenThisAppVersion);
 
-        boolean seenThisRun = Once.beenDone(Once.THIS_APP_RUN, unseenTag);
-        Assert.assertFalse(seenThisRun);
+        boolean seenInTheLastDay = Once.beenDone(TimeUnit.DAYS, 1, unseenTag);
+        Assert.assertFalse(seenInTheLastDay);
     }
 
     @Test
     public void markTagAsSeen() {
-        Once.initialise(RuntimeEnvironment.application);
-
         String tag = "seen tag";
-
         Once.markDone(tag);
 
         boolean seenThisInstall = Once.beenDone(Once.THIS_APP_INSTALL, tag);
@@ -41,14 +43,12 @@ public class OnceTests {
         boolean seenThisAppVersion = Once.beenDone(Once.THIS_APP_VERSION, tag);
         Assert.assertTrue(seenThisAppVersion);
 
-        boolean seenThisRun = Once.beenDone(Once.THIS_APP_RUN, tag);
-        Assert.assertTrue(seenThisRun);
+        boolean seenThisDay = Once.beenDone(TimeUnit.DAYS, 1, tag);
+        Assert.assertTrue(seenThisDay);
     }
 
     @Test
     public void seenTagAfterAppRestart() {
-        Once.initialise(RuntimeEnvironment.application);
-
         String tag = "seen tag";
         Once.markDone(tag);
 
@@ -60,9 +60,11 @@ public class OnceTests {
 
         boolean seenThisAppVersion = Once.beenDone(Once.THIS_APP_VERSION, tag);
         Assert.assertTrue(seenThisAppVersion);
+    }
 
-        boolean seenThisRun = Once.beenDone(Once.THIS_APP_RUN, tag);
-        Assert.assertFalse(seenThisRun);
+    @Test
+    public void seenTagAfterAppUpdate() {
+        // fake packageInfo.lastUpdateTime
     }
 
 }

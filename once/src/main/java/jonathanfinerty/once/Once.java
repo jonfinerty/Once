@@ -1,87 +1,79 @@
+
 package jonathanfinerty.once;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.support.annotation.IntDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class Once {
 
     public static final int THIS_APP_INSTALL = 0;
     public static final int THIS_APP_VERSION = 1;
-    public static final int THIS_APP_RUN = 2;
 
-    private static final int NO_PREVIOUS_APP_VERSION = -1;
-    private static final String PREVIOUS_APP_VERSION_KEY = "previousAppVersion";
-    private static PersistedSeenSet appInstallSeen;
-    private static PersistedSeenSet appVersionSeen;
-    private static Set<String> appRunSeen;
-    private static SharedPreferences sharedPreferences;
+    private static long lastAppUpdatedTime = -1;
+
+    private static PersistedMap tagLastSeenMap;
 
     private Once() {
     }
 
     public static void initialise(Context context) {
-        sharedPreferences = context.getSharedPreferences("oncePreferences", Context.MODE_PRIVATE);
-        appInstallSeen = new PersistedSeenSet(sharedPreferences, "appInstall");
-        appVersionSeen = new PersistedSeenSet(sharedPreferences, "appVersion");
-        appRunSeen = new HashSet<>();
+        tagLastSeenMap = new PersistedMap(context, "TagLastSeenMap");
 
-        if (isNewAppVersion()) {
-            appVersionSeen.clear();
-            saveLatestAppVersion();
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            lastAppUpdatedTime = packageInfo.lastUpdateTime;
+        } catch (PackageManager.NameNotFoundException ignored) {
+
         }
-    }
-
-    private static void saveLatestAppVersion() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(PREVIOUS_APP_VERSION_KEY, BuildConfig.VERSION_CODE);
-        editor.apply();
-    }
-
-    private static boolean isNewAppVersion() {
-        int previousAppVersion = sharedPreferences.getInt("previousAppVersion", NO_PREVIOUS_APP_VERSION);
-
-        return previousAppVersion != NO_PREVIOUS_APP_VERSION && previousAppVersion != BuildConfig.VERSION_CODE;
     }
 
     public static boolean beenDone(@Scope int doneScope, String tag) {
 
-        if (appRunSeen.contains(tag)) {
-            return true;
-        }
+        Long tagLastSeenDate = tagLastSeenMap.get(tag);
 
-        if (doneScope == THIS_APP_RUN) {
+        if (tagLastSeenDate == null) {
             return false;
         }
 
-        if (appVersionSeen.contains(tag)) {
+        if (doneScope == THIS_APP_INSTALL) {
             return true;
         }
 
-        if (doneScope == THIS_APP_VERSION) {
+
+        return true;
+    }
+
+    public static boolean beenDone(TimeUnit timeUnit, long time, String tag) {
+        long timeInMillis = timeUnit.toMillis(time);
+        return beenDone(timeInMillis, tag);
+    }
+
+    public static boolean beenDone(long timeSpanInMillis, String tag) {
+        Long timeTagSeen = tagLastSeenMap.get(tag);
+
+        if (timeTagSeen == null) {
             return false;
         }
 
-        if (appInstallSeen.contains(tag)) {
-            return true;
-        }
+        long sinceSinceCheckTime = new Date().getTime() - timeSpanInMillis;
 
-        return false;
+        return timeTagSeen > sinceSinceCheckTime;
     }
 
     public static void markDone(String tag) {
-        appInstallSeen.add(tag);
-        appVersionSeen.add(tag);
-        appRunSeen.add(tag);
+        tagLastSeenMap.put(tag, new Date().getTime());
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({THIS_APP_INSTALL, THIS_APP_VERSION, THIS_APP_RUN})
+    @IntDef({THIS_APP_INSTALL, THIS_APP_VERSION})
     public @interface Scope {
     }
 
