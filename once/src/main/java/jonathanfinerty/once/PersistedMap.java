@@ -42,4 +42,11 @@ class PersistedMap {
         edit.remove(tag);
         edit.apply();
     }
+
+    public void clear() {
+        map.clear();
+        SharedPreferences.Editor edit = preferences.edit();
+        edit.clear();
+        edit.apply();
+    }
 }

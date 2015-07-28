@@ -67,23 +67,6 @@ public class OnceTests {
     }
 
     @Test
-    public void seenTagAfterAppRestart() {
-        Once.markDone(tagUnderTest);
-
-        // Is there a better way to simulate an app restart?
-        Once.initialise(RuntimeEnvironment.application);
-
-        boolean seenThisInstall = Once.beenDone(Once.THIS_APP_INSTALL, tagUnderTest);
-        Assert.assertTrue(seenThisInstall);
-
-        boolean seenThisAppVersion = Once.beenDone(Once.THIS_APP_VERSION, tagUnderTest);
-        Assert.assertTrue(seenThisAppVersion);
-
-        boolean seenThisMinute = Once.beenDone(TimeUnit.MINUTES, 1, tagUnderTest);
-        Assert.assertTrue(seenThisMinute);
-    }
-
-    @Test
     public void seenTagAfterAppUpdate() {
         Once.markDone(tagUnderTest);
 
@@ -118,6 +101,23 @@ public class OnceTests {
         Assert.assertFalse(seenThisSecondInMillis);
     }
 
+    @Test
+    public void reset() {
+        String tag1 = "tag1";
+        String tag2 = "tag2";
+        Once.markDone(tag1);
+        Once.markDone(tag2);
+
+        Once.clearAll();
+
+        Assert.assertFalse(Once.beenDone(Once.THIS_APP_INSTALL, tag1));
+        Assert.assertFalse(Once.beenDone(Once.THIS_APP_VERSION, tag1));
+        Assert.assertFalse(Once.beenDone(1000L, tag1));
+
+        Assert.assertFalse(Once.beenDone(Once.THIS_APP_INSTALL, tag2));
+        Assert.assertFalse(Once.beenDone(Once.THIS_APP_VERSION, tag2));
+        Assert.assertFalse(Once.beenDone(1000L, tag2));
+    }
 
     private void simulateAppUpdate() {
         RobolectricPackageManager rpm = RuntimeEnvironment.getRobolectricPackageManager();
