@@ -31,21 +31,15 @@ if (!beenDone(THIS_APP_VERSION, showWhatsNew)) {
 
 ## Installation
 
-Add maven repository to your app module's `build.gradle`:
-
-```
-repositories {
-    maven { url 'https://dl.bintray.com/jonathanfinerty/maven' }
-}
-```
-
-Then add a library dependency in the same `build.gradle`:
+Add a library dependency to your app module's `build.gradle`:
 
 ```
 dependencies {
     compile 'com.jonathanfinerty.once:once:0.3.1'
 }
 ```
+
+You'll need to have `jcenter()` in your list of repositories
 
 ## Example
 

@@ -24,7 +24,3 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.jonathanfinerty.once:once:0.3.1'
 }
-
-repositories {
-    maven { url 'https://dl.bintray.com/jonathanfinerty/maven' }
-}
