@@ -51,6 +51,22 @@ public class OnceTests {
     }
 
     @Test
+    public void removeFromDone() {
+        Once.markDone(tagUnderTest);
+
+        Once.clearDone(tagUnderTest);
+
+        boolean seenThisInstall = Once.beenDone(Once.THIS_APP_INSTALL, tagUnderTest);
+        Assert.assertFalse(seenThisInstall);
+
+        boolean seenThisAppVersion = Once.beenDone(Once.THIS_APP_VERSION, tagUnderTest);
+        Assert.assertFalse(seenThisAppVersion);
+
+        boolean seenInTheLastDay = Once.beenDone(TimeUnit.DAYS, 1, tagUnderTest);
+        Assert.assertFalse(seenInTheLastDay);
+    }
+
+    @Test
     public void seenTagAfterAppRestart() {
         Once.markDone(tagUnderTest);
 

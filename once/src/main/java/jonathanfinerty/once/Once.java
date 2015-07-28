@@ -1,4 +1,3 @@
-
 package jonathanfinerty.once;
 
 import android.content.Context;
@@ -24,7 +23,9 @@ public class Once {
     }
 
     public static void initialise(Context context) {
-        tagLastSeenMap = new PersistedMap(context, "TagLastSeenMap");
+        if (tagLastSeenMap == null) {
+            tagLastSeenMap = new PersistedMap(context, "TagLastSeenMap");
+        }
 
         PackageManager packageManager = context.getPackageManager();
         try {
@@ -69,6 +70,10 @@ public class Once {
 
     public static void markDone(String tag) {
         tagLastSeenMap.put(tag, new Date().getTime());
+    }
+
+    public static void clearDone(String tag) {
+        tagLastSeenMap.remove(tag);
     }
 
     @Retention(RetentionPolicy.SOURCE)
