@@ -43,7 +43,7 @@ Then add a library dependency in the same `build.gradle`:
 
 ```
 dependencies {
-    compile 'com.jonathanfinerty.once:once:0.0.1'
+    compile 'com.jonathanfinerty.once:once:0.3.1'
 }
 ```
 
