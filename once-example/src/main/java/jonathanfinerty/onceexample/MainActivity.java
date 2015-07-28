@@ -7,6 +7,8 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.concurrent.TimeUnit;
+
 import jonathanfinerty.once.Once;
 
 import static jonathanfinerty.once.Once.THIS_APP_INSTALL;
@@ -18,6 +20,7 @@ public class MainActivity extends ActionBarActivity {
     public static final String SHOW_FRESH_INSTALL_DIALOG = "FreshInstallDialog";
     public static final String SHOW_NEW_VERSION_DIALOG = "NewVersionDialog";
     public static final String SHOW_MINUTE_DIALOG = "OncePerMinuteDialog";
+    public static final String SHOW_SECOND_DIALOG = "OncePerSecondDialog";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +32,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 if (!beenDone(THIS_APP_INSTALL, SHOW_FRESH_INSTALL_DIALOG)) {
-                    showFreshInstallDialog();
+                    showDialog("This dialog should only appear once per app installation");
                     markDone(SHOW_FRESH_INSTALL_DIALOG);
                 }
             }
@@ -40,7 +43,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 if (!beenDone(Once.THIS_APP_VERSION, SHOW_NEW_VERSION_DIALOG)) {
-                    showNewVersionDialog();
+                    showDialog("This dialog should only appear once per app version");
                     markDone(SHOW_NEW_VERSION_DIALOG);
                 }
             }
@@ -50,45 +53,28 @@ public class MainActivity extends ActionBarActivity {
         oncePerMinuteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if (!beenDone(TimeUnit.MINUTES, 1, SHOW_MINUTE_DIALOG)) {
-                    showMinuteDialog();
+                if (!beenDone(TimeUnit.MINUTES, 1, SHOW_MINUTE_DIALOG)) {
+                    showDialog("This dialog should only appear once per minute");
                     markDone(SHOW_MINUTE_DIALOG);
-                }*/
+                }
             }
         });
 
+        Button oncePerSecondButton = (Button) findViewById(R.id.once_per_second_button);
+        oncePerSecondButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!beenDone(1000L, SHOW_SECOND_DIALOG)) {
+                    showDialog("This dialog should only appear once per second");
+                    markDone(SHOW_SECOND_DIALOG);
+                }
+            }
+        });
     }
 
-    private void showFreshInstallDialog() {
+    private void showDialog(String message) {
         AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
-        alertDialog.setTitle("New Install Detected");
-        alertDialog.setMessage("This dialog should only appear once per app installation");
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        alertDialog.show();
-    }
-
-    private void showNewVersionDialog() {
-        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
-        alertDialog.setTitle("New Version Detected");
-        alertDialog.setMessage("This dialog should only appear once per app version");
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        alertDialog.show();
-    }
-
-    private void showMinuteDialog() {
-        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
-        alertDialog.setTitle("Once per minute");
-        alertDialog.setMessage("This dialog should only appear a maximum of once per minute");
+        alertDialog.setMessage(message);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {

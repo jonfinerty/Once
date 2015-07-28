@@ -15,19 +15,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="48dp"
-        android:text="Once per install button" />
+        android:text="@string/per_install_button" />
 
     <Button
         android:id="@+id/once_per_version_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="48dp"
-        android:text="Once per version button" />
+        android:text="@string/per_version_button" />
 
     <Button
         android:id="@+id/once_per_minute_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Once per minute button" />
+        android:layout_marginBottom="48dp"
+        android:text="@string/per_minute_button" />
+
+    <Button
+        android:id="@+id/once_per_second_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/per_second_button" />
 
 </LinearLayout>

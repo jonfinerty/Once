@@ -3,4 +3,8 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="per_install_button">Once per install button</string>
+    <string name="per_version_button">Once per version button</string>
+    <string name="per_minute_button">Once per minute button</string>
+    <string name="per_second_button">Once per second button</string>
 </resources>
