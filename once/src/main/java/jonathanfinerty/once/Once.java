@@ -47,8 +47,7 @@ public class Once {
             return true;
         }
 
-
-        return true;
+        return tagLastSeenDate > lastAppUpdatedTime;
     }
 
     public static boolean beenDone(TimeUnit timeUnit, long time, String tag) {
