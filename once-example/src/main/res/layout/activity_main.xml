@@ -14,27 +14,34 @@
         android:id="@+id/once_per_install_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="36dp"
         android:text="@string/per_install_button" />
 
     <Button
         android:id="@+id/once_per_version_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="36dp"
         android:text="@string/per_version_button" />
 
     <Button
         android:id="@+id/once_per_minute_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="36dp"
         android:text="@string/per_minute_button" />
 
     <Button
         android:id="@+id/once_per_second_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="36dp"
         android:text="@string/per_second_button" />
+
+    <Button
+        android:id="@+id/reset_all_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset all buttons"/>
 
 </LinearLayout>

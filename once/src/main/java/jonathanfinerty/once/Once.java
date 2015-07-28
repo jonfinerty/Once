@@ -25,6 +25,8 @@ public class Once {
     /**
      * This method needs to be called before Once can be used.
      * Typically it will be called from your Application class's onCreate method.
+     *
+     * @param context Application context
      */
     public static void initialise(Context context) {
         if (tagLastSeenMap == null) {

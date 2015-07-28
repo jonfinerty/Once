@@ -70,6 +70,14 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
         });
+
+        Button resetButton = (Button) findViewById(R.id.reset_all_button);
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Once.clearAll();
+            }
+        });
     }
 
     private void showDialog(String message) {
