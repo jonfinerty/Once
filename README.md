@@ -23,8 +23,38 @@ Now you're ready to go. Say you wanted to navigate to a 'WhatsNew' Activity ever
 ```java
 String showWhatsNew = "showWhatsNewTag";
 
-if (!beenDone(THIS_APP_VERSION, showWhatsNew)) {
+if (!Once.beenDone(Once.THIS_APP_VERSION, showWhatsNew)) {
     startActivity(this, WhatsNewActivity.class);
+    Once.markDone(showWhatsNew);
+}
+```
+
+Or if you want your app tour to be shown only when a user install, simply check the tag using the `THIS_APP_INSTALL` scope:
+
+```java
+if (!Once.beenDone(Once.THIS_APP_INSTALL, showAppTour)) {
+    ...
+    Once.markDone(showAppTour);
+}
+```
+
+Your app operations can also be rate-limited by time spans. So for example if you only want to phone back to your a maximum of server once per hour, you'd do the following: 
+```java
+if (!Once.beenDone(TimeUnit.HOURS, 1, phonedHome) { ... }
+```
+ 
+To de-noise your code a bit more you can also static-import the `Once` methods, so usage looks a bit cleaner
+
+```java
+import static jonathanfinerty.once.Once.THIS_APP_INSTALL;
+import static jonathanfinerty.once.Once.beenDone;
+import static jonathanfinerty.once.Once.markDone;
+
+...
+...
+
+if (!beenDone(THIS_APP_VERSION, tagName)) {
+    ...
     markDone(showWhatsNew);
 }
 ```
