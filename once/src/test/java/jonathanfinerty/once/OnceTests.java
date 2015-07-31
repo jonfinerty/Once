@@ -2,6 +2,7 @@ package jonathanfinerty.once;
 
 import android.content.pm.PackageInfo;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,8 +25,14 @@ public class OnceTests {
         Once.initialise(RuntimeEnvironment.application);
     }
 
+    @After
+    public void CleanUp() {
+        Once.clearAll();
+    }
+
     @Test
     public void unseenTags() {
+        Once.clearAll();
         boolean seenThisInstall = Once.beenDone(Once.THIS_APP_INSTALL, tagUnderTest);
         Assert.assertFalse(seenThisInstall);
 
@@ -102,7 +109,7 @@ public class OnceTests {
     }
 
     @Test
-    public void reset() {
+    public void clearAll() {
         String tag1 = "tag1";
         String tag2 = "tag2";
         Once.markDone(tag1);

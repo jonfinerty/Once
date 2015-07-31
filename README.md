@@ -35,7 +35,7 @@ Add a library dependency to your app module's `build.gradle`:
 
 ```
 dependencies {
-    compile 'com.jonathanfinerty.once:once:0.3.1'
+    compile 'com.jonathanfinerty.once:once:0.3.2'
 }
 ```
 
