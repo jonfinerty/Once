@@ -75,6 +75,12 @@ You'll need to have `jcenter()` in your list of repositories
 
 Have a look at the example app in `once-example/` for more simple usage.
 
+## Contributing
+
+`Once` was made in '20%' time at [Huddle](https://talentcommunity.huddle.com/), where its used to help build our Android apps. [Pete O'Grady](https://twitter.com/peteog) and [Paul Simmons](https://twitter.com/slamminsoup) also provided invaluable feedback.
+
+Pull requests and github issues are more than welcome and you can get in touch with me directly [@jonfinerty](https://twitter.com/jonfinerty).
+
 ## License
 
 ```
