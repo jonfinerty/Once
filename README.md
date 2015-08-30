@@ -59,6 +59,23 @@ if (!beenDone(THIS_APP_VERSION, tagName)) {
 }
 ```
 
+TODO feature: show app tour only after user register success  
+```java
+// after register success, add a todo task
+Once.todo(showAppTour)
+
+...
+
+// at the home page, check whether need todo a task
+if (Once.needTodo(showAppTour)) {
+    // do some operations
+    ...
+    
+    // after task has been done, mark it as done
+    Once.done(showAppTour);
+}
+```
+
 ## Installation
 
 Add a library dependency to your app module's `build.gradle`:
