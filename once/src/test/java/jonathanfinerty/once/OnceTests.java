@@ -126,6 +126,30 @@ public class OnceTests {
         Assert.assertFalse(Once.beenDone(1000L, tag2));
     }
 
+    @Test
+    public void todo() {
+        String task1 = "task1";
+        String task2 = "task2";
+        Assert.assertFalse(Once.needTodo(task1));
+        Assert.assertFalse(Once.needTodo(task2));
+        Assert.assertFalse(Once.beenDone(task1));
+        Assert.assertFalse(Once.beenDone(task2));
+
+        Once.todo(task1);
+        Once.todo(task2);
+        Assert.assertTrue(Once.needTodo(task1));
+        Assert.assertTrue(Once.needTodo(task2));
+        Assert.assertFalse(Once.beenDone(task1));
+        Assert.assertFalse(Once.beenDone(task2));
+
+        Once.done(task1);
+        Once.done(task2);
+        Assert.assertFalse(Once.needTodo(task1));
+        Assert.assertFalse(Once.needTodo(task2));
+        Assert.assertTrue(Once.beenDone(task1));
+        Assert.assertTrue(Once.beenDone(task2));
+    }
+
     private void simulateAppUpdate() {
         RobolectricPackageManager rpm = RuntimeEnvironment.getRobolectricPackageManager();
         PackageInfo packageInfo = new PackageInfo();

@@ -42,6 +42,44 @@ public class Once {
         }
     }
 
+    private static final Long TODO_TASK_TODO = 1313L;
+    private static final Long TODO_TASK_DONE = 1314L;
+
+    /**
+     * Add a task that to be done later.
+     * @param task   A string identifier unique to the operation.
+     * */
+    public static void todo(String task) {
+        tagLastSeenMap.put(task, TODO_TASK_TODO);
+    }
+
+    /**
+     * Checks if a task need todo.
+     * @param task   A string identifier unique to the operation.
+     * @return {@code true} if the operation associated with {@code task} need todo.
+     * */
+    public static boolean needTodo(String task) {
+        return TODO_TASK_TODO.equals(tagLastSeenMap.get(task));
+    }
+
+    /**
+     * Checks if a task has been done.
+     * @param task   A string identifier unique to the operation.
+     * @return {@code true} if the operation associated with {@code task} has been marked done.
+     * */
+    public static boolean beenDone(String task) {
+        return TODO_TASK_DONE.equals(tagLastSeenMap.get(task));
+    }
+
+    /**
+     * Marks a task (associated with some operation) as done.
+     *
+     * @param task A string identifier unique to the operation.
+     */
+    public static void done(String task) {
+        tagLastSeenMap.put(task, TODO_TASK_DONE);
+    }
+
     /**
      * Checks if a tag has been marked done within a given scope.
      *
