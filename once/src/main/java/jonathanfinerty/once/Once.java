@@ -18,6 +18,7 @@ public class Once {
     private static long lastAppUpdatedTime = -1;
 
     private static PersistedMap tagLastSeenMap;
+    private static PersistedSet toDoSet;
 
     private Once() {
     }
@@ -33,6 +34,10 @@ public class Once {
             tagLastSeenMap = new PersistedMap(context, "TagLastSeenMap");
         }
 
+        if (toDoSet == null) {
+            toDoSet = new PersistedSet(context, "ToDoSet");
+        }
+
         PackageManager packageManager = context.getPackageManager();
         try {
             PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
@@ -42,42 +47,56 @@ public class Once {
         }
     }
 
-    private static final Long TODO_TASK_TODO = 1313L;
-    private static final Long TODO_TASK_DONE = 1314L;
-
     /**
-     * Add a task that to be done later.
-     * @param task   A string identifier unique to the operation.
-     * */
-    public static void todo(String task) {
-        tagLastSeenMap.put(task, TODO_TASK_TODO);
-    }
-
-    /**
-     * Checks if a task need todo.
-     * @param task   A string identifier unique to the operation.
-     * @return {@code true} if the operation associated with {@code task} need todo.
-     * */
-    public static boolean needTodo(String task) {
-        return TODO_TASK_TODO.equals(tagLastSeenMap.get(task));
-    }
-
-    /**
-     * Checks if a task has been done.
-     * @param task   A string identifier unique to the operation.
-     * @return {@code true} if the operation associated with {@code task} has been marked done.
-     * */
-    public static boolean beenDone(String task) {
-        return TODO_TASK_DONE.equals(tagLastSeenMap.get(task));
-    }
-
-    /**
-     * Marks a task (associated with some operation) as done.
+     * Mark a tag as 'to do' within a given scope, if it has already marked to do or been done
+     * within that scope then it will not be marked.
      *
-     * @param task A string identifier unique to the operation.
+     * @param scope The scope to not repeat the to do task in
+     * @param tag   A string identifier unique to the operation.
+     * */
+    public static void toDo(@Scope int scope, String tag) {
+
+        Long tagLastSeenDate = tagLastSeenMap.get(tag);
+
+        if (tagLastSeenDate == null) {
+            toDoSet.put(tag);
+            return;
+        }
+
+        if (scope == THIS_APP_VERSION && tagLastSeenDate <= lastAppUpdatedTime) {
+            toDoSet.put(tag);
+        }
+    }
+
+    /**
+     * Mark a tag as 'to do' regardless of whether or not its ever been marked done before
+     * @param tag   A string identifier unique to the operation.
+     * */
+    public static void toDo(String tag) {
+        toDoSet.put(tag);
+    }
+
+    /**
+     * Checks if a tag is currently marked as 'to do'.
+     *
+     * @param tag   A string identifier unique to the operation.
+     * @return {@code true} if the operation associated with {@code tag} has been marked 'to do' and has not been passed to {@code markDone()} since.
+     * */
+    public static boolean needToDo(String tag) {
+        return toDoSet.contains(tag);
+    }
+
+    /**
+     * Checks if a tag has been marked done, ever.
+     *
+     * Equivalent of calling {@code beenDone(int scope, String tag)} with scope of {@code THIS_APP_INSTALL}.
+     *
+     * @param tag   A string identifier unique to the operation.
+     * @return {@code true} if the operation associated with {@code tag} has been marked done within
+     * the given {@code scope}.
      */
-    public static void done(String task) {
-        tagLastSeenMap.put(task, TODO_TASK_DONE);
+    public static boolean beenDone(String tag) {
+        return beenDone(THIS_APP_INSTALL, tag);
     }
 
     /**
@@ -147,6 +166,7 @@ public class Once {
      */
     public static void markDone(String tag) {
         tagLastSeenMap.put(tag, new Date().getTime());
+        toDoSet.remove(tag);
     }
 
     /**
@@ -160,6 +180,16 @@ public class Once {
     }
 
     /**
+     * Clears a tag as 'to do'. All checks with {@code needToDo()} with that tag will return false until
+     * it is marked 'to do' again.
+     *
+     * @param tag A string identifier unique to the operation.
+     */
+    public static void clearToDo(String tag) {
+        toDoSet.remove(tag);
+    }
+
+    /**
      * Clears all tags as done. All checks with {@code beenDone()} with any tag will return true
      * until they are marked done again.
      */
@@ -167,9 +197,16 @@ public class Once {
         tagLastSeenMap.clear();
     }
 
+    /**
+     * Clears all tags as 'to do'. All checks with {@code needToDo()} with any tag will return {@code false}
+     * until they are marked 'to do' again.
+     */
+    public static void clearAllToDos() {
+        toDoSet.clear();
+    }
+
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({THIS_APP_INSTALL, THIS_APP_VERSION})
     public @interface Scope {
     }
-
 }

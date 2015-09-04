@@ -128,27 +128,75 @@ public class OnceTests {
 
     @Test
     public void todo() {
-        String task1 = "task1";
-        String task2 = "task2";
-        Assert.assertFalse(Once.needTodo(task1));
-        Assert.assertFalse(Once.needTodo(task2));
+        String task1 = "todo task";
+        Assert.assertFalse(Once.needToDo(task1));
         Assert.assertFalse(Once.beenDone(task1));
-        Assert.assertFalse(Once.beenDone(task2));
 
-        Once.todo(task1);
-        Once.todo(task2);
-        Assert.assertTrue(Once.needTodo(task1));
-        Assert.assertTrue(Once.needTodo(task2));
+        Once.toDo(task1);
+        Assert.assertTrue(Once.needToDo(task1));
         Assert.assertFalse(Once.beenDone(task1));
-        Assert.assertFalse(Once.beenDone(task2));
 
-        Once.done(task1);
-        Once.done(task2);
-        Assert.assertFalse(Once.needTodo(task1));
-        Assert.assertFalse(Once.needTodo(task2));
+        Once.markDone(task1);
+        Assert.assertFalse(Once.needToDo(task1));
         Assert.assertTrue(Once.beenDone(task1));
-        Assert.assertTrue(Once.beenDone(task2));
+        Assert.assertTrue(Once.beenDone(TimeUnit.SECONDS, 1, task1));
     }
+
+    @Test
+    public void repeatingToDos() {
+        String tag = "repeating to do task";
+        Once.toDo(tag);
+
+        Assert.assertTrue(Once.needToDo(tag));
+        Once.markDone(tag);
+
+        Once.toDo(tag);
+        Assert.assertTrue(Once.needToDo(tag));
+    }
+
+    @Test
+    public void todoThisInstall() {
+        String tag = "to do this install task";
+
+        Once.toDo(Once.THIS_APP_INSTALL, tag);
+        Assert.assertTrue(Once.needToDo(tag));
+        Assert.assertFalse(Once.beenDone(tag));
+
+        Once.markDone(tag);
+        Assert.assertFalse(Once.needToDo(tag));
+        Assert.assertTrue(Once.beenDone(tag));
+
+        Once.toDo(Once.THIS_APP_INSTALL, tag);
+        Assert.assertFalse(Once.needToDo(tag));
+
+        Once.toDo(tag);
+        Assert.assertTrue(Once.needToDo(tag));
+    }
+
+    @Test
+    public void todoThisAppVersion() {
+        String tag = "todo this app version task";
+
+        Once.toDo(Once.THIS_APP_VERSION, tag);
+        Assert.assertTrue(Once.needToDo(tag));
+        Assert.assertFalse(Once.beenDone(tag));
+
+        Once.markDone(tag);
+        Assert.assertFalse(Once.needToDo(tag));
+        Assert.assertTrue(Once.beenDone(tag));
+
+        Once.toDo(Once.THIS_APP_VERSION, tag);
+        Assert.assertFalse(Once.needToDo(tag));
+
+        simulateAppUpdate();
+
+        Once.toDo(Once.THIS_APP_VERSION, tag);
+        Assert.assertTrue(Once.needToDo(tag));
+
+        Once.toDo(tag);
+        Assert.assertTrue(Once.needToDo(tag));
+    }
+
 
     private void simulateAppUpdate() {
         RobolectricPackageManager rpm = RuntimeEnvironment.getRobolectricPackageManager();

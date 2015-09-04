@@ -18,6 +18,9 @@ First things first, you'll need to initialise Once on start up. In your `Applica
 Once.initialise(this);
 ```
 
+
+### Checking if something has been _done_
+
 Now you're ready to go. Say you wanted to navigate to a 'WhatsNew' Activity every time your app is upgraded:
 
 ```java
@@ -42,7 +45,32 @@ Your app operations can also be rate-limited by time spans. So for example if yo
 ```java
 if (!Once.beenDone(TimeUnit.HOURS, 1, phonedHome) { ... }
 ```
- 
+
+
+### Marking something as _to do_
+
+Say one part of your app triggers functionality elsewhere. For example you might have some advanced feature onboarding to show on the main activity, but you only want to show it once the user has seen the basic functionality.
+
+```java
+
+// in the basic functionality activity
+Once.toDo(Once.THIS_APP_INSTALL, "show feature onboarding");
+...
+
+// back in the home activity
+if (Once.needToDo(showAppTour)) {
+    // do some operations
+    ...
+
+    // after task has been done, mark it as done as normal
+    Once.markDone(showAppTour);
+}
+```
+
+When a task is marked done it is removed from the set of tasks 'to do' so subsequent `needToDo(tag)` calls will return `false`. To stop the tag from being added back to your todo list each time the user looks at the basic functionality task, we've added a scope to the todo call: `toDo(Once.THIS_APP_INSTALL, tag)`. You could also use the `THIS_APP_VERSION` scope for todo's which should happen once per app version, or leave off scope complete for tasks which should be repeated every time.
+
+
+
 To de-noise your code a bit more you can also static-import the `Once` methods, so usage looks a bit cleaner
 
 ```java
@@ -59,30 +87,13 @@ if (!beenDone(THIS_APP_VERSION, tagName)) {
 }
 ```
 
-TODO feature: show app tour only after user register success  
-```java
-// after register success, add a todo task
-Once.todo(showAppTour)
-
-...
-
-// at the home page, check whether need todo a task
-if (Once.needTodo(showAppTour)) {
-    // do some operations
-    ...
-    
-    // after task has been done, mark it as done
-    Once.done(showAppTour);
-}
-```
-
 ## Installation
 
 Add a library dependency to your app module's `build.gradle`:
 
 ```
 dependencies {
-    compile 'com.jonathanfinerty.once:once:0.3.2'
+    compile 'com.jonathanfinerty.once:once:0.4.2'
 }
 ```
 
