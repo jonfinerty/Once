@@ -124,7 +124,7 @@ public class Once {
     }
 
     /**
-     * Checks if a tag has been marked done within a given time span (e.g. the last 5 minutes)
+     * Checks if a tag has been marked done within a given time span. (e.g. the last 5 minutes)
      *
      * @param timeUnit The units of time to work in.
      * @param amount   The quantity of timeUnit.
@@ -138,7 +138,7 @@ public class Once {
     }
 
     /**
-     * Checks if a tag has been marked done within a the last X milliseconds
+     * Checks if a tag has been marked done within a the last {@code timeSpanInMillis} milliseconds.
      *
      * @param timeSpanInMillis How many milliseconds ago to check if a tag has been marked done
      *                         since.
@@ -159,8 +159,8 @@ public class Once {
     }
 
     /**
-     * Marks a tag (associated with some operation) as done. The tag is marked done at the time
-     * of calling this method
+     * Marks a tag (associated with some operation) as done. The {@code tag} is marked done at the time
+     * of calling this method.
      *
      * @param tag A string identifier unique to the operation.
      */
@@ -170,7 +170,7 @@ public class Once {
     }
 
     /**
-     * Clears a tag as done. All checks with {@code beenDone()} with that tag will return true until
+     * Clears a tag as done. All checks with {@code beenDone()} with that tag will return {@code false} until
      * it is marked done again.
      *
      * @param tag A string identifier unique to the operation.
@@ -180,7 +180,7 @@ public class Once {
     }
 
     /**
-     * Clears a tag as 'to do'. All checks with {@code needToDo()} with that tag will return false until
+     * Clears a tag as 'to do'. All checks with {@code needToDo()} with that tag will return {@code false} until
      * it is marked 'to do' again.
      *
      * @param tag A string identifier unique to the operation.
@@ -190,7 +190,7 @@ public class Once {
     }
 
     /**
-     * Clears all tags as done. All checks with {@code beenDone()} with any tag will return true
+     * Clears all tags as done. All checks with {@code beenDone()} with any tag will return {@code false}
      * until they are marked done again.
      */
     public static void clearAll() {
