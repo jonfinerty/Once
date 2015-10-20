@@ -1,4 +1,7 @@
 # Once
+[![Android Weekly](http://img.shields.io/badge/Android%20Weekly-%23164-33B5E5.svg?style=flat)](http://androidweekly.net/issues/issue-164)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Once-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2206)
+
 A small Android library to manage one-off operations.
 
 ----
