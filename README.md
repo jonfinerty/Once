@@ -96,7 +96,7 @@ Add a library dependency to your app module's `build.gradle`:
 
 ```
 dependencies {
-    compile 'com.jonathanfinerty.once:once:0.4.1'
+    compile 'com.jonathanfinerty.once:once:0.4.2'
 }
 ```
 
