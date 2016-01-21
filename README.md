@@ -30,7 +30,7 @@ Now you're ready to go. Say you wanted to navigate to a 'WhatsNew' Activity ever
 String showWhatsNew = "showWhatsNewTag";
 
 if (!Once.beenDone(Once.THIS_APP_VERSION, showWhatsNew)) {
-    startActivity(this, WhatsNewActivity.class);
+    startActivity(new Intent(this, WhatsNewActivity.class));
     Once.markDone(showWhatsNew);
 }
 ```
