@@ -1,0 +1,12 @@
+# http://docs.travis-ci.com/user/languages/android/
+language: android
+
+android:
+  components:
+    # The BuildTools version used by your project
+    - build-tools-23.0.2
+
+    # The SDK version used to compile your project
+    - android-23
+
+script: ./gradlew testDebug
