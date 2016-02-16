@@ -97,10 +97,14 @@ artifacts {
 
 bintray {
     Properties properties = new Properties()
-    properties.load(project.rootProject.file('bintray.properties').newDataInputStream())
+    def bintrayProperties = project.rootProject.file('bintray.properties')
 
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
+    if( bintrayProperties.exists() ) {
+        properties.load(bintrayProperties.newDataInputStream())
+
+        user = properties.getProperty("bintray.user")
+        key = properties.getProperty("bintray.apikey")
+    }
 
     configurations = ['archives']
     pkg {
