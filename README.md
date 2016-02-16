@@ -3,7 +3,7 @@
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Once-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2206)
 [![Build Status](https://travis-ci.org/jonfinerty/Once.svg?branch=master)](https://travis-ci.org/jonfinerty/Once)
 
-A small Android library to manage one-off operations.
+A small Android library to manage one-off operations for API 9 and higher.
 
 ----
 
@@ -97,7 +97,7 @@ Add a library dependency to your app module's `build.gradle`:
 
 ```
 dependencies {
-    compile 'com.jonathanfinerty.once:once:0.4.2'
+    compile 'com.jonathanfinerty.once:once:0.5.0'
 }
 ```
 

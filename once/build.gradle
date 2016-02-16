@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: "com.jfrog.bintray"
 
-version = "0.4.2"
+version = "0.5.0"
 
 android {
     compileSdkVersion 23
@@ -46,7 +46,7 @@ install {
             project {
                 packaging 'aar'
 
-                name 'A small Android library to manage one-off operations.'
+                name 'A small Android library to manage one-off operations for API 9 and higher.'
                 url siteUrl
 
                 licenses {
