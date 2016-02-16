@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "jonathanfinerty.onceexample"
-        minSdkVersion 11
+        minSdkVersion 8
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -22,5 +22,6 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.jonathanfinerty.once:once:0.4.2'
+    //compile 'com.jonathanfinerty.once:once:0.4.2'
+    compile project(':once')
 }

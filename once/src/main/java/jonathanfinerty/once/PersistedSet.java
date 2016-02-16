@@ -2,7 +2,10 @@ package jonathanfinerty.once;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
+import android.text.TextUtils;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +19,18 @@ public class PersistedSet {
     public PersistedSet(Context context, String setName) {
         preferences = context.getSharedPreferences(PersistedSet.class.getSimpleName() + setName, Context.MODE_PRIVATE);
 
-        set = preferences.getStringSet(STRING_SET_KEY, new HashSet<String>());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            set = preferences.getStringSet(STRING_SET_KEY, new HashSet<String>());
+        }else{
+            String setString = preferences.getString(STRING_SET_KEY, null);
+            if (!TextUtils.isEmpty(setString)){
+                set = new HashSet<>(Arrays.asList(setString.split(",")));
+            }else{
+                set = new HashSet<>();
+            }
+        }
+
+
     }
 
     public void put(String tag) {
@@ -40,7 +54,26 @@ public class PersistedSet {
 
     private void updatePreferences() {
         SharedPreferences.Editor edit = preferences.edit();
-        edit.putStringSet(STRING_SET_KEY, set);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            edit.putStringSet(STRING_SET_KEY, set);
+        }else{
+            edit.putString(STRING_SET_KEY, StringSetToString(set, ","));
+        }
         edit.apply();
+    }
+
+    public static String StringSetToString(Set<String> set, String delimiter) {
+        StringBuilder sb = new StringBuilder();
+        String loopDelimiter = "";
+
+        for (String s : set) {
+            sb.append(loopDelimiter);
+            sb.append(s);
+
+            loopDelimiter = delimiter;
+        }
+
+        return sb.toString();
     }
 }
