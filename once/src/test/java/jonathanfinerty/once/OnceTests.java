@@ -14,6 +14,8 @@ import org.robolectric.res.builder.RobolectricPackageManager;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import dalvik.annotation.TestTarget;
+
 @RunWith(TestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 public class OnceTests {
@@ -197,6 +199,13 @@ public class OnceTests {
         Assert.assertTrue(Once.needToDo(tag));
     }
 
+    @Test
+    public void emptyTag() {
+        String emptyTag = "";
+        Assert.assertFalse(Once.beenDone(emptyTag));
+        Once.markDone(emptyTag);
+        Assert.assertTrue(Once.beenDone(emptyTag));
+    }
 
     private void simulateAppUpdate() {
         RobolectricPackageManager rpm = RuntimeEnvironment.getRobolectricPackageManager();

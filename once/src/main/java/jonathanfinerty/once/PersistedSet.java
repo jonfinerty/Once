@@ -3,15 +3,20 @@ package jonathanfinerty.once;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class PersistedSet {
 
     private static final String STRING_SET_KEY = "PersistedSetValues";
+    public static final String DELIMITER = ",";
     private final SharedPreferences preferences;
 
     private Set<String> set = new HashSet<>();
@@ -21,16 +26,10 @@ public class PersistedSet {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             set = preferences.getStringSet(STRING_SET_KEY, new HashSet<String>());
-        }else{
+        } else {
             String setString = preferences.getString(STRING_SET_KEY, null);
-            if (!TextUtils.isEmpty(setString)){
-                set = new HashSet<>(Arrays.asList(setString.split(",")));
-            }else{
-                set = new HashSet<>();
-            }
+            set = new HashSet<>(StringToStringSet(setString));
         }
-
-
     }
 
     public void put(String tag) {
@@ -57,23 +56,32 @@ public class PersistedSet {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             edit.putStringSet(STRING_SET_KEY, set);
-        }else{
-            edit.putString(STRING_SET_KEY, StringSetToString(set, ","));
+        } else {
+            edit.putString(STRING_SET_KEY, StringSetToString(set));
         }
         edit.apply();
     }
 
-    public static String StringSetToString(Set<String> set, String delimiter) {
-        StringBuilder sb = new StringBuilder();
+    private String StringSetToString(Set<String> set) {
+        StringBuilder stringBuilder = new StringBuilder();
         String loopDelimiter = "";
 
         for (String s : set) {
-            sb.append(loopDelimiter);
-            sb.append(s);
+            stringBuilder.append(loopDelimiter);
+            stringBuilder.append(s);
 
-            loopDelimiter = delimiter;
+            loopDelimiter = DELIMITER;
         }
 
-        return sb.toString();
+        return stringBuilder.toString();
+    }
+
+    @NonNull
+    private Set<String> StringToStringSet(@Nullable String setString) {
+        if (setString == null) {
+            return new HashSet<>();
+        }
+
+        return new HashSet<>(Arrays.asList(setString.split(DELIMITER)));
     }
 }
