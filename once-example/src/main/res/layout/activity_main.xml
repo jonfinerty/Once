@@ -42,6 +42,6 @@
         android:id="@+id/reset_all_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Reset all buttons"/>
+        android:text="@string/reset_all_button"/>
 
 </LinearLayout>
