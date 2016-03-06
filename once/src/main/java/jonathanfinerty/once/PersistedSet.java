@@ -5,18 +5,15 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public class PersistedSet {
+class PersistedSet {
 
     private static final String STRING_SET_KEY = "PersistedSetValues";
-    public static final String DELIMITER = ",";
+    private static final String DELIMITER = ",";
     private final SharedPreferences preferences;
 
     private Set<String> set = new HashSet<>();

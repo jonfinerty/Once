@@ -2,8 +2,8 @@ package jonathanfinerty.onceexample;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
@@ -15,12 +15,12 @@ import static jonathanfinerty.once.Once.THIS_APP_INSTALL;
 import static jonathanfinerty.once.Once.beenDone;
 import static jonathanfinerty.once.Once.markDone;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
-    public static final String SHOW_FRESH_INSTALL_DIALOG = "FreshInstallDialog";
-    public static final String SHOW_NEW_VERSION_DIALOG = "NewVersionDialog";
-    public static final String SHOW_MINUTE_DIALOG = "OncePerMinuteDialog";
-    public static final String SHOW_SECOND_DIALOG = "OncePerSecondDialog";
+    private static final String SHOW_FRESH_INSTALL_DIALOG = "FreshInstallDialog";
+    private static final String SHOW_NEW_VERSION_DIALOG = "NewVersionDialog";
+    private static final String SHOW_MINUTE_DIALOG = "OncePerMinuteDialog";
+    private static final String SHOW_SECOND_DIALOG = "OncePerSecondDialog";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

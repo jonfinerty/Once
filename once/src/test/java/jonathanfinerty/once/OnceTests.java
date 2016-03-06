@@ -14,8 +14,6 @@ import org.robolectric.res.builder.RobolectricPackageManager;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import dalvik.annotation.TestTarget;
-
 @RunWith(TestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 public class OnceTests {

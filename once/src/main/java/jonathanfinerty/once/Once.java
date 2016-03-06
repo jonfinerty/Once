@@ -116,6 +116,7 @@ public class Once {
             return false;
         }
 
+        //noinspection SimplifiableIfStatement
         if (scope == THIS_APP_INSTALL) {
             return true;
         }

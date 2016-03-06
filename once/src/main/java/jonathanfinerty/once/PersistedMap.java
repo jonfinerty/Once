@@ -10,7 +10,7 @@ class PersistedMap {
 
     private static final long KEY_NOT_FOUND_VALUE = -1;
     private final SharedPreferences preferences;
-    private Map<String, Long> map = new ConcurrentHashMap<>();
+    private final Map<String, Long> map = new ConcurrentHashMap<>();
 
     public PersistedMap(Context context, String mapName) {
         preferences = context.getSharedPreferences(PersistedMap.class.getSimpleName() + mapName, Context.MODE_PRIVATE);
