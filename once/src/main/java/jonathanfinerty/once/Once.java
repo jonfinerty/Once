@@ -8,7 +8,10 @@ import android.support.annotation.IntDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static jonathanfinerty.once.Amount.moreThan;
 
 public class Once {
 
@@ -53,25 +56,28 @@ public class Once {
      *
      * @param scope The scope to not repeat the to do task in
      * @param tag   A string identifier unique to the operation.
-     * */
+     */
     public static void toDo(@Scope int scope, String tag) {
 
-        Long tagLastSeenDate = tagLastSeenMap.get(tag);
+        List<Long> tagSeenList = tagLastSeenMap.get(tag);
 
-        if (tagLastSeenDate == null) {
+        if (tagSeenList.isEmpty()) {
             toDoSet.put(tag);
             return;
         }
 
-        if (scope == THIS_APP_VERSION && tagLastSeenDate <= lastAppUpdatedTime) {
+        Long tagLastSeen = tagSeenList.get(tagSeenList.size() - 1);
+
+        if (scope == THIS_APP_VERSION && tagLastSeen <= lastAppUpdatedTime) {
             toDoSet.put(tag);
         }
     }
 
     /**
      * Mark a tag as 'to do' regardless of whether or not its ever been marked done before
-     * @param tag   A string identifier unique to the operation.
-     * */
+     *
+     * @param tag A string identifier unique to the operation.
+     */
     public static void toDo(String tag) {
         toDoSet.put(tag);
     }
@@ -79,24 +85,32 @@ public class Once {
     /**
      * Checks if a tag is currently marked as 'to do'.
      *
-     * @param tag   A string identifier unique to the operation.
+     * @param tag A string identifier unique to the operation.
      * @return {@code true} if the operation associated with {@code tag} has been marked 'to do' and has not been passed to {@code markDone()} since.
-     * */
+     */
     public static boolean needToDo(String tag) {
         return toDoSet.contains(tag);
     }
 
     /**
      * Checks if a tag has been marked done, ever.
-     *
+     * <p/>
      * Equivalent of calling {@code beenDone(int scope, String tag)} with scope of {@code THIS_APP_INSTALL}.
      *
-     * @param tag   A string identifier unique to the operation.
+     * @param tag A string identifier unique to the operation.
      * @return {@code true} if the operation associated with {@code tag} has been marked done within
      * the given {@code scope}.
      */
     public static boolean beenDone(String tag) {
-        return beenDone(THIS_APP_INSTALL, tag);
+        return beenDone(THIS_APP_INSTALL, tag, moreThan(0));
+    }
+
+    public static boolean beenDone(String tag, CountChecker numberOfTimes) {
+        return beenDone(THIS_APP_INSTALL, tag, numberOfTimes);
+    }
+
+    public static boolean beenDone(@Scope int scope, String tag) {
+        return beenDone(scope, tag, moreThan(0));
     }
 
     /**
@@ -108,20 +122,31 @@ public class Once {
      * @return {@code true} if the operation associated with {@code tag} has been marked done within
      * the given {@code scope}.
      */
-    public static boolean beenDone(@Scope int scope, String tag) {
+    public static boolean beenDone(@Scope int scope, String tag, CountChecker numberOfTimes) {
 
-        Long tagLastSeenDate = tagLastSeenMap.get(tag);
+        List<Long> tagSeenDates = tagLastSeenMap.get(tag);
 
-        if (tagLastSeenDate == null) {
+        if (tagSeenDates.isEmpty()) {
             return false;
         }
 
         //noinspection SimplifiableIfStatement
         if (scope == THIS_APP_INSTALL) {
-            return true;
+            return numberOfTimes.check(tagSeenDates.size());
         }
 
-        return tagLastSeenDate > lastAppUpdatedTime;
+        int counter = 0;
+        for (Long seenDate : tagSeenDates) {
+            if (seenDate > lastAppUpdatedTime) {
+                counter++;
+            }
+        }
+
+        return numberOfTimes.check(counter);
+    }
+
+    public static boolean beenDone(TimeUnit timeUnit, long amount, String tag) {
+        return beenDone(timeUnit, amount, tag, moreThan(0));
     }
 
     /**
@@ -133,9 +158,13 @@ public class Once {
      * @return {@code true} if the operation associated with {@code tag} has been marked done
      * within the last provide time span.
      */
-    public static boolean beenDone(TimeUnit timeUnit, long amount, String tag) {
+    public static boolean beenDone(TimeUnit timeUnit, long amount, String tag, CountChecker numberOfTimes) {
         long timeInMillis = timeUnit.toMillis(amount);
-        return beenDone(timeInMillis, tag);
+        return beenDone(timeInMillis, tag, numberOfTimes);
+    }
+
+    public static boolean beenDone(long timeSpanInMillis, String tag) {
+        return beenDone(timeSpanInMillis, tag, moreThan(0));
     }
 
     /**
@@ -147,16 +176,22 @@ public class Once {
      * @return {@code true} if the operation associated with {@code tag} has been marked done
      * within the last X milliseconds.
      */
-    public static boolean beenDone(long timeSpanInMillis, String tag) {
-        Long timeTagSeen = tagLastSeenMap.get(tag);
+    public static boolean beenDone(long timeSpanInMillis, String tag, CountChecker numberOfTimes) {
+        List<Long> tagSeenDates = tagLastSeenMap.get(tag);
 
-        if (timeTagSeen == null) {
+        if (tagSeenDates.isEmpty()) {
             return false;
         }
 
-        long sinceSinceCheckTime = new Date().getTime() - timeSpanInMillis;
+        int counter = 0;
+        for (Long seenDate : tagSeenDates) {
+            long sinceSinceCheckTime = new Date().getTime() - timeSpanInMillis;
+            if (seenDate > sinceSinceCheckTime) {
+                counter++;
+            }
+        }
 
-        return timeTagSeen > sinceSinceCheckTime;
+        return numberOfTimes.check(counter);
     }
 
     /**
