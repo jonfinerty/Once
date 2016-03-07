@@ -3,20 +3,15 @@ package jonathanfinerty.once;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 class PersistedMap {
 
-    private static final long KEY_NOT_FOUND_VALUE = -1;
     private static final String DELIMITER = ",";
 
     private final SharedPreferences preferences;

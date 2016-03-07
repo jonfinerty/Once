@@ -11,8 +11,10 @@ import java.util.concurrent.TimeUnit;
 
 import jonathanfinerty.once.Once;
 
+import static jonathanfinerty.once.Amount.exactly;
 import static jonathanfinerty.once.Once.THIS_APP_INSTALL;
 import static jonathanfinerty.once.Once.beenDone;
+import static jonathanfinerty.once.Once.clearDone;
 import static jonathanfinerty.once.Once.markDone;
 
 public class MainActivity extends AppCompatActivity {
@@ -67,6 +69,19 @@ public class MainActivity extends AppCompatActivity {
                 if (!beenDone(1000L, SHOW_SECOND_DIALOG)) {
                     showDialog("This dialog should only appear once per second");
                     markDone(SHOW_SECOND_DIALOG);
+                }
+            }
+        });
+
+        Button oncePerThreePressesButton = (Button) findViewById(R.id.three_presses_button);
+        oncePerThreePressesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String buttonPressedTag = "button pressed";
+                markDone(buttonPressedTag);
+                if (beenDone(buttonPressedTag, exactly(3))) {
+                    showDialog("This dialog should only appear once every three presses");
+                    clearDone(buttonPressedTag);
                 }
             }
         });

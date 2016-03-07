@@ -5,5 +5,6 @@
     <string name="per_version_button">Once per version button</string>
     <string name="per_minute_button">Once per minute button</string>
     <string name="per_second_button">Once per second button</string>
+    <string name="three_presses_button">Once every three presses button</string>
     <string name="reset_all_button">Reset all buttons</string>
 </resources>

@@ -105,22 +105,40 @@ public class Once {
         return beenDone(THIS_APP_INSTALL, tag, moreThan(0));
     }
 
+    /**
+     * Check if a tag has been done a specific number of times.
+     * @param tag           A string identifier unique to the operation.
+     * @param numberOfTimes Requirement for how many times the operation must have be done.
+     * @return {@code true} if the operation associated with {@code tag} has been marked done the specific {@code numberOfTimes}.
+     */
     public static boolean beenDone(String tag, CountChecker numberOfTimes) {
         return beenDone(THIS_APP_INSTALL, tag, numberOfTimes);
     }
 
-    public static boolean beenDone(@Scope int scope, String tag) {
-        return beenDone(scope, tag, moreThan(0));
-    }
-
     /**
-     * Checks if a tag has been marked done within a given scope.
+     * Checks if a tag has been marked done, at least once, in a given scope.
+     * <p/>
+     * Equivalent of calling {@code beenDone(int scope, String tag, CountChecker numberOfTimes)} with scope of {@code THIS_APP_INSTALL} and a numberOfTimes of {@code Amount.moreThan(0)}.
      *
      * @param scope The scope in which to check whether the tag has been done, either
      *              {@code THIS_APP_INSTALL} or {@code THIS_APP_VERSION}.
      * @param tag   A string identifier unique to the operation.
      * @return {@code true} if the operation associated with {@code tag} has been marked done within
-     * the given {@code scope}.
+     * the given {@code scope} at least once.
+     */
+    public static boolean beenDone(@Scope int scope, String tag) {
+        return beenDone(scope, tag, moreThan(0));
+    }
+
+    /**
+     * Checks if a tag has been marked done within a given scope a specific number of times.
+     *
+     * @param scope         The scope in which to check whether the tag has been done, either
+     *                      {@code THIS_APP_INSTALL} or {@code THIS_APP_VERSION}.
+     * @param tag           A string identifier unique to the operation.
+     * @param numberOfTimes Requirement for how many times the operation must have be done.
+     * @return {@code true} if the operation associated with {@code tag} has been marked done within
+     * the given {@code scope} the specific {@code numberOfTimes}.
      */
     public static boolean beenDone(@Scope int scope, String tag, CountChecker numberOfTimes) {
 
@@ -145,12 +163,8 @@ public class Once {
         return numberOfTimes.check(counter);
     }
 
-    public static boolean beenDone(TimeUnit timeUnit, long amount, String tag) {
-        return beenDone(timeUnit, amount, tag, moreThan(0));
-    }
-
     /**
-     * Checks if a tag has been marked done within a given time span. (e.g. the last 5 minutes)
+     * Checks if a tag has been marked done within a given time span at least once. (e.g. the last 5 minutes)
      *
      * @param timeUnit The units of time to work in.
      * @param amount   The quantity of timeUnit.
@@ -158,21 +172,46 @@ public class Once {
      * @return {@code true} if the operation associated with {@code tag} has been marked done
      * within the last provide time span.
      */
+    public static boolean beenDone(TimeUnit timeUnit, long amount, String tag) {
+        return beenDone(timeUnit, amount, tag, moreThan(0));
+    }
+
+    /**
+     * Checks if a tag has been marked done within a given time span a specific number of times. (e.g. twice in the last 5 minutes)
+     *
+     * @param timeUnit      The units of time to work in.
+     * @param amount        The quantity of timeUnit.
+     * @param tag           A string identifier unique to the operation.
+     * @param numberOfTimes Requirement for how many times the operation must have be done.
+     * @return {@code true} if the operation associated with {@code tag} has been marked done at least {@code numberOfTimes}
+     * within the last provide time span.
+     */
     public static boolean beenDone(TimeUnit timeUnit, long amount, String tag, CountChecker numberOfTimes) {
         long timeInMillis = timeUnit.toMillis(amount);
         return beenDone(timeInMillis, tag, numberOfTimes);
     }
 
+    /**
+     * Checks if a tag has been marked done within a the last {@code timeSpanInMillis} milliseconds at least once.
+     *
+     * @param timeSpanInMillis How many milliseconds ago to check if a tag has been marked done
+     *                         since.
+     * @param tag              A string identifier unique to the operation.
+     * @return {@code true} if the operation associated with {@code tag} has been marked done at least once
+     * within the last X milliseconds.
+     */
     public static boolean beenDone(long timeSpanInMillis, String tag) {
         return beenDone(timeSpanInMillis, tag, moreThan(0));
     }
 
     /**
-     * Checks if a tag has been marked done within a the last {@code timeSpanInMillis} milliseconds.
+     * Checks if a tag has been marked done within a the last {@code timeSpanInMillis} milliseconds
+     * a specific number of times.
      *
      * @param timeSpanInMillis How many milliseconds ago to check if a tag has been marked done
      *                         since.
      * @param tag              A string identifier unique to the operation.
+     * @param numberOfTimes    Requirement for how many times the operation must have be done.
      * @return {@code true} if the operation associated with {@code tag} has been marked done
      * within the last X milliseconds.
      */
