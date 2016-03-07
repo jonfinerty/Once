@@ -9,6 +9,7 @@ import org.robolectric.res.Fs;
 import java.io.File;
 import java.io.IOException;
 
+@SuppressWarnings("WeakerAccess")
 public class TestRunner extends RobolectricGradleTestRunner {
 
     private static final String DEFAULT_MANIFEST_LOCATION = "src/main/AndroidManifest.xml";

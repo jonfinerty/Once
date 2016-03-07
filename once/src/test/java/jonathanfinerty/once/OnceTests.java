@@ -14,7 +14,7 @@ import org.robolectric.res.builder.RobolectricPackageManager;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import dalvik.annotation.TestTarget;
+import static jonathanfinerty.once.Amount.exactly;
 
 @RunWith(TestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
@@ -205,6 +205,63 @@ public class OnceTests {
         Assert.assertFalse(Once.beenDone(emptyTag));
         Once.markDone(emptyTag);
         Assert.assertTrue(Once.beenDone(emptyTag));
+    }
+
+    @Test
+    public void beenDoneMultipleTimes() {
+        String testTag = "action done several times";
+        Once.markDone(testTag);
+        Once.markDone(testTag);
+
+        Assert.assertFalse(Once.beenDone(testTag,  exactly(3)));
+
+        Once.markDone(testTag);
+
+        Assert.assertTrue(Once.beenDone(testTag,  exactly(3)));
+    }
+
+    @Test
+    public void beenDoneMultipleTimesAcrossScopes() throws InterruptedException {
+        String testTag = "action done several times in different scopes";
+        Once.markDone(testTag);
+
+        simulateAppUpdate();
+        Thread.sleep(TimeUnit.SECONDS.toMillis(1));
+        Once.markDone(testTag);
+
+        Assert.assertTrue(Once.beenDone(Once.THIS_APP_INSTALL, testTag, exactly(2)));
+        Assert.assertFalse(Once.beenDone(Once.THIS_APP_VERSION, testTag, exactly(2)));
+
+        Once.markDone(testTag);
+
+        Assert.assertTrue(Once.beenDone(Once.THIS_APP_INSTALL, testTag, exactly(3)));
+        Assert.assertTrue(Once.beenDone(Once.THIS_APP_VERSION, testTag, exactly(2)));
+    }
+
+    @Test
+    public void beenDoneDifferentTimeChecks() {
+        String testTag = "test tag";
+        Once.markDone(testTag);
+        Once.markDone(testTag);
+        Once.markDone(testTag);
+
+        Assert.assertTrue(Once.beenDone(testTag, Amount.moreThan(-1)));
+        Assert.assertTrue(Once.beenDone(testTag, Amount.moreThan(2)));
+        Assert.assertFalse(Once.beenDone(testTag, Amount.moreThan(3)));
+
+        Assert.assertTrue(Once.beenDone(testTag, Amount.lessThan(10)));
+        Assert.assertTrue(Once.beenDone(testTag, Amount.lessThan(4)));
+        Assert.assertFalse(Once.beenDone(testTag, Amount.lessThan(3)));
+    }
+
+    @Test
+    public void beenDoneMultipleTimesWithTimeStamps() throws InterruptedException {
+        Once.markDone(tagUnderTest);
+        Thread.sleep(TimeUnit.SECONDS.toMillis(1));
+        Once.markDone(tagUnderTest);
+
+        Assert.assertTrue(Once.beenDone(TimeUnit.SECONDS, 3, tagUnderTest, exactly(2)));
+        Assert.assertTrue(Once.beenDone(TimeUnit.SECONDS, 1, tagUnderTest, exactly(1)));
     }
 
     private void simulateAppUpdate() {

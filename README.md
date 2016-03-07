@@ -73,7 +73,19 @@ if (Once.needToDo(showAppTour)) {
 
 When a task is marked done it is removed from the set of tasks 'to do' so subsequent `needToDo(tag)` calls will return `false`. To stop the tag from being added back to your todo list each time the user looks at the basic functionality task, we've added a scope to the todo call: `toDo(Once.THIS_APP_INSTALL, tag)`. You could also use the `THIS_APP_VERSION` scope for todo's which should happen once per app version, or leave off scope complete for tasks which should be repeated every time.
 
+### Doing something once per X events
 
+Sometimes you need to keep track of how many times something has happened before you act on it. For example, you could prompt the user to rate your app after they've used the core functionality three times.
+
+```java
+// Once again in the basic functionality activity
+Once.markDone("action");
+if (Once.beenDone("action", Amount.exactly(3))) {
+    showRateTheAppDialog();
+}
+```
+
+You can also change the count checking from `exactly(int x)` times, to either `Amount.lessThan(int x)` times or `Amount.moreThan(int x)` times. When you don't specific a particular amount, Once will default to `Amount.moreThan(0)` i.e. checking if it's ever been done at all.
 
 To de-noise your code a bit more you can also static-import the `Once` methods, so usage looks a bit cleaner
 
@@ -97,7 +109,7 @@ Add a library dependency to your app module's `build.gradle`:
 
 ```
 dependencies {
-    compile 'com.jonathanfinerty.once:once:0.5.0'
+    compile 'com.jonathanfinerty.once:once:1.0.0'
 }
 ```
 
