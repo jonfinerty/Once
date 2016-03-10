@@ -22,9 +22,26 @@ class PersistedMap {
         Map<String, ?> allPreferences = preferences.getAll();
 
         for (String key : allPreferences.keySet()) {
-            List<Long> values = stringToList(preferences.getString(key, null));
+
+            List<Long> values;
+            try {
+                values = stringToList(preferences.getString(key, null));
+            } catch (ClassCastException exception) {
+                values = loadFromLegacyStorageFormat(key);
+            }
+
             map.put(key, values);
         }
+    }
+
+    private List<Long> loadFromLegacyStorageFormat(String key) {
+        long value = preferences.getLong(key, -1);
+        List<Long> values = new ArrayList<>(1);
+        values.add(value);
+
+        preferences.edit().putString(key, listToString(values)).apply();
+
+        return values;
     }
 
     @NonNull
