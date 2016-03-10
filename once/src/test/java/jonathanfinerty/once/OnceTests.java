@@ -1,5 +1,7 @@
 package jonathanfinerty.once;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 
 import org.junit.After;
