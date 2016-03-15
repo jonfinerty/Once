@@ -12,6 +12,13 @@ android {
         versionName "1.0"
     }
 
+    if (!project.hasProperty('keyStoreLocation')) {
+        ext.keyStoreLocation = "null"
+        ext.keyStorePassword = "null"
+        ext.signingKeyAlias = "null"
+        ext.signingKeyPassword = "null"
+    }
+
     signingConfigs {
         release {
             storeFile file(keyStoreLocation)

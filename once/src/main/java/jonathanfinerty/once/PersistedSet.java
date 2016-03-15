@@ -9,17 +9,26 @@ import android.support.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
-class PersistedSet {
+class PersistedSet implements AsyncSharedPreferenceLoader.Listener {
 
     private static final String STRING_SET_KEY = "PersistedSetValues";
     private static final String DELIMITER = ",";
-    private final SharedPreferences preferences;
 
+    private SharedPreferences preferences;
     private Set<String> set = new HashSet<>();
 
+    private final CountDownLatch loaded = new CountDownLatch(1);
+
     public PersistedSet(Context context, String setName) {
-        preferences = context.getSharedPreferences(PersistedSet.class.getSimpleName() + setName, Context.MODE_PRIVATE);
+        AsyncSharedPreferenceLoader preferenceLoader = new AsyncSharedPreferenceLoader(context, this);
+        preferenceLoader.load(PersistedSet.class.getSimpleName() + setName);
+    }
+
+    @Override
+    public void onLoad(SharedPreferences sharedPreferences) {
+        preferences = sharedPreferences;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             set = preferences.getStringSet(STRING_SET_KEY, new HashSet<String>());
@@ -27,23 +36,41 @@ class PersistedSet {
             String setString = preferences.getString(STRING_SET_KEY, null);
             set = new HashSet<>(StringToStringSet(setString));
         }
+
+        loaded.countDown();
+    }
+
+    private void waitForLoad() {
+        try {
+            loaded.await();
+        } catch (InterruptedException ignored) {
+
+        }
     }
 
     public void put(String tag) {
+        waitForLoad();
+
         set.add(tag);
         updatePreferences();
     }
 
     public boolean contains(String tag) {
+        waitForLoad();
+
         return set.contains(tag);
     }
 
     public void remove(String tag) {
+        waitForLoad();
+
         set.remove(tag);
         updatePreferences();
     }
 
     public void clear() {
+        waitForLoad();
+
         set.clear();
         updatePreferences();
     }
