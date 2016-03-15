@@ -9,16 +9,25 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
 
-class PersistedMap {
+class PersistedMap implements AsyncSharedPreferenceLoader.Listener {
 
     private static final String DELIMITER = ",";
 
-    private final SharedPreferences preferences;
+    private final CountDownLatch loaded = new CountDownLatch(1);
+
+    private SharedPreferences preferences;
     private final Map<String, List<Long>> map = new ConcurrentHashMap<>();
 
     public PersistedMap(Context context, String mapName) {
-        preferences = context.getSharedPreferences(PersistedMap.class.getSimpleName() + mapName, Context.MODE_PRIVATE);
+        AsyncSharedPreferenceLoader preferenceLoader = new AsyncSharedPreferenceLoader(context, this);
+        preferenceLoader.load(PersistedMap.class.getSimpleName() + mapName);
+    }
+
+    @Override
+    public void onLoad(SharedPreferences sharedPreferences) {
+        preferences = sharedPreferences;
         Map<String, ?> allPreferences = preferences.getAll();
 
         for (String key : allPreferences.keySet()) {
@@ -31,6 +40,16 @@ class PersistedMap {
             }
 
             map.put(key, values);
+        }
+
+        loaded.countDown();
+    }
+
+    private void waitForLoad() {
+        try {
+            loaded.await();
+        } catch (InterruptedException ignored) {
+
         }
     }
 
@@ -46,6 +65,8 @@ class PersistedMap {
 
     @NonNull
     public List<Long> get(String tag) {
+        waitForLoad();
+
         List<Long> longs = map.get(tag);
         if (longs == null) {
             return Collections.emptyList();
@@ -54,6 +75,8 @@ class PersistedMap {
     }
 
     public void put(String tag, long timeSeen) {
+        waitForLoad();
+
         List<Long> lastSeenTimeStamps = map.get(tag);
         if (lastSeenTimeStamps == null) {
             lastSeenTimeStamps = new ArrayList<>(1);
@@ -67,6 +90,8 @@ class PersistedMap {
     }
 
     public void remove(String tag) {
+        waitForLoad();
+
         map.remove(tag);
         SharedPreferences.Editor edit = preferences.edit();
         edit.remove(tag);
@@ -74,6 +99,8 @@ class PersistedMap {
     }
 
     public void clear() {
+        waitForLoad();
+
         map.clear();
         SharedPreferences.Editor edit = preferences.edit();
         edit.clear();
@@ -108,4 +135,6 @@ class PersistedMap {
 
         return list;
     }
+
+
 }
