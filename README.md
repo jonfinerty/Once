@@ -117,7 +117,7 @@ You'll need to have `jcenter()` in your list of repositories
 
 ## Example
 
-Have a look at the example app in `once-example/` for more simple usage.
+Try out the sample app here: https://play.google.com/store/apps/details?id=jonathanfinerty.onceexample and have a look at it's source code in `once-example/` for more simple usage.
 
 ## Contributing
 
