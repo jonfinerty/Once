@@ -4,12 +4,18 @@ android {
     compileSdkVersion 23
     buildToolsVersion '23.0.2'
 
+
+
     defaultConfig {
         applicationId "jonathanfinerty.onceexample"
         minSdkVersion 9
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+    }
+
+    if (!project.hasProperty('keyStoreLocation')) {
+        ext.keyStoreLocation = "null"
     }
 
     signingConfigs {
