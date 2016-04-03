@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Once.markDone("Application Launched");
+
         setContentView(R.layout.activity_main);
 
         Button oncePerInstallButton = (Button) findViewById(R.id.once_per_install_button);

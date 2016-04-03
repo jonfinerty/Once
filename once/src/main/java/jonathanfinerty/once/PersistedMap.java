@@ -9,25 +9,26 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CountDownLatch;
 
-class PersistedMap implements AsyncSharedPreferenceLoader.Listener {
+class PersistedMap {
 
     private static final String DELIMITER = ",";
 
-    private final CountDownLatch loaded = new CountDownLatch(1);
-
     private SharedPreferences preferences;
     private final Map<String, List<Long>> map = new ConcurrentHashMap<>();
+    private final AsyncSharedPreferenceLoader preferenceLoader;
 
     public PersistedMap(Context context, String mapName) {
-        AsyncSharedPreferenceLoader preferenceLoader = new AsyncSharedPreferenceLoader(context, this);
-        preferenceLoader.load(PersistedMap.class.getSimpleName() + mapName);
+        String preferencesName = PersistedMap.class.getSimpleName() + mapName;
+        preferenceLoader = new AsyncSharedPreferenceLoader(context, preferencesName);
     }
 
-    @Override
-    public void onLoad(SharedPreferences sharedPreferences) {
-        preferences = sharedPreferences;
+    private void waitForLoad() {
+        if (preferences != null) {
+            return;
+        }
+
+        preferences = preferenceLoader.get();
         Map<String, ?> allPreferences = preferences.getAll();
 
         for (String key : allPreferences.keySet()) {
@@ -40,16 +41,6 @@ class PersistedMap implements AsyncSharedPreferenceLoader.Listener {
             }
 
             map.put(key, values);
-        }
-
-        loaded.countDown();
-    }
-
-    private void waitForLoad() {
-        try {
-            loaded.await();
-        } catch (InterruptedException ignored) {
-
         }
     }
 

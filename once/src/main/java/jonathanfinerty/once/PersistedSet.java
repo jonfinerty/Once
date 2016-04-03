@@ -9,9 +9,8 @@ import android.support.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.CountDownLatch;
 
-class PersistedSet implements AsyncSharedPreferenceLoader.Listener {
+class PersistedSet {
 
     private static final String STRING_SET_KEY = "PersistedSetValues";
     private static final String DELIMITER = ",";
@@ -19,32 +18,23 @@ class PersistedSet implements AsyncSharedPreferenceLoader.Listener {
     private SharedPreferences preferences;
     private Set<String> set = new HashSet<>();
 
-    private final CountDownLatch loaded = new CountDownLatch(1);
+    private final AsyncSharedPreferenceLoader preferenceLoader;
 
     public PersistedSet(Context context, String setName) {
-        AsyncSharedPreferenceLoader preferenceLoader = new AsyncSharedPreferenceLoader(context, this);
-        preferenceLoader.load(PersistedSet.class.getSimpleName() + setName);
-    }
-
-    @Override
-    public void onLoad(SharedPreferences sharedPreferences) {
-        preferences = sharedPreferences;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            set = preferences.getStringSet(STRING_SET_KEY, new HashSet<String>());
-        } else {
-            String setString = preferences.getString(STRING_SET_KEY, null);
-            set = new HashSet<>(StringToStringSet(setString));
-        }
-
-        loaded.countDown();
+        String preferencesName = PersistedSet.class.getSimpleName() + setName;
+        preferenceLoader = new AsyncSharedPreferenceLoader(context, preferencesName);
     }
 
     private void waitForLoad() {
-        try {
-            loaded.await();
-        } catch (InterruptedException ignored) {
+        if (preferences == null) {
+            preferences = preferenceLoader.get();
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                set = preferences.getStringSet(STRING_SET_KEY, new HashSet<String>());
+            } else {
+                String setString = preferences.getString(STRING_SET_KEY, null);
+                set = new HashSet<>(StringToStringSet(setString));
+            }
         }
     }
 
