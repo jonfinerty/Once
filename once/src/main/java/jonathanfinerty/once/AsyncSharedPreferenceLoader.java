@@ -3,35 +3,30 @@ package jonathanfinerty.once;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
+
+import java.util.concurrent.ExecutionException;
 
 class AsyncSharedPreferenceLoader {
 
-    interface Listener {
-        void onLoad(SharedPreferences sharedPreferences);
-    }
-
     private final Context context;
-    private final Listener listener;
 
     private final AsyncTask<String, Void, SharedPreferences> asyncTask = new AsyncTask<String, Void, SharedPreferences>() {
         @Override
         protected SharedPreferences doInBackground(String... names) {
             return context.getSharedPreferences(names[0], Context.MODE_PRIVATE);
         }
-
-        @Override
-        protected void onPostExecute(SharedPreferences sharedPreferences) {
-            listener.onLoad(sharedPreferences);
-        }
     };
 
-    public AsyncSharedPreferenceLoader(Context context, Listener listener) {
+    public AsyncSharedPreferenceLoader(Context context, String name) {
         this.context = context;
-        this.listener = listener;
+        asyncTask.execute(name);
     }
 
-    public void load(@NonNull String name) {
-        asyncTask.execute(name);
+    public SharedPreferences get() {
+        try {
+            return asyncTask.get();
+        } catch (InterruptedException | ExecutionException ignored) {
+            return null;
+        }
     }
 }

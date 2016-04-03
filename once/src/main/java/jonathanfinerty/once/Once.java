@@ -97,6 +97,7 @@ public class Once {
      * <p>
      * Equivalent of calling {@code beenDone(int scope, String tag)} with scope of {@code THIS_APP_INSTALL}.
      * </p>
+     *
      * @param tag A string identifier unique to the operation.
      * @return {@code true} if the operation associated with {@code tag} has been marked done within
      * the given {@code scope}.
@@ -107,6 +108,7 @@ public class Once {
 
     /**
      * Check if a tag has been done a specific number of times.
+     *
      * @param tag           A string identifier unique to the operation.
      * @param numberOfTimes Requirement for how many times the operation must have be done.
      * @return {@code true} if the operation associated with {@code tag} has been marked done the specific {@code numberOfTimes}.
@@ -120,6 +122,7 @@ public class Once {
      * <p>
      * Equivalent of calling {@code beenDone(int scope, String tag, CountChecker numberOfTimes)} with scope of {@code THIS_APP_INSTALL} and a numberOfTimes of {@code Amount.moreThan(0)}.
      * </p>
+     *
      * @param scope The scope in which to check whether the tag has been done, either
      *              {@code THIS_APP_INSTALL} or {@code THIS_APP_VERSION}.
      * @param tag   A string identifier unique to the operation.
