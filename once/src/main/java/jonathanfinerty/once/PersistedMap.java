@@ -19,7 +19,7 @@ class PersistedMap {
     private final AsyncSharedPreferenceLoader preferenceLoader;
 
     public PersistedMap(Context context, String mapName) {
-        String preferencesName = PersistedMap.class.getSimpleName() + mapName;
+        String preferencesName = "PersistedMap".concat(mapName);
         preferenceLoader = new AsyncSharedPreferenceLoader(context, preferencesName);
     }
 

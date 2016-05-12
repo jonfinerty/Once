@@ -21,7 +21,7 @@ class PersistedSet {
     private final AsyncSharedPreferenceLoader preferenceLoader;
 
     public PersistedSet(Context context, String setName) {
-        String preferencesName = PersistedSet.class.getSimpleName() + setName;
+        String preferencesName = "PersistedSet".concat(setName);
         preferenceLoader = new AsyncSharedPreferenceLoader(context, preferencesName);
     }
 
