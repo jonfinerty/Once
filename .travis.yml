@@ -8,4 +8,4 @@ android:
     - android-23
     - extra-android-m2repository
 
-script: gradle testDebug
+script: ./gradlew testDebug
