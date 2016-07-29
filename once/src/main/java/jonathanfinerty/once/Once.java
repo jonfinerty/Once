@@ -7,6 +7,7 @@ import android.support.annotation.IntDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -17,11 +18,13 @@ public class Once {
 
     public static final int THIS_APP_INSTALL = 0;
     public static final int THIS_APP_VERSION = 1;
+    public static final int THIS_APP_SESSION = 2;
 
     private static long lastAppUpdatedTime = -1;
 
     private static PersistedMap tagLastSeenMap;
     private static PersistedSet toDoSet;
+    private static ArrayList<String> sessionList;
 
     private Once() {
     }
@@ -39,6 +42,10 @@ public class Once {
 
         if (toDoSet == null) {
             toDoSet = new PersistedSet(context, "ToDoSet");
+        }
+
+        if (sessionList == null) {
+            sessionList = new ArrayList<>();
         }
 
         PackageManager packageManager = context.getPackageManager();
@@ -154,16 +161,24 @@ public class Once {
         //noinspection SimplifiableIfStatement
         if (scope == THIS_APP_INSTALL) {
             return numberOfTimes.check(tagSeenDates.size());
-        }
-
-        int counter = 0;
-        for (Long seenDate : tagSeenDates) {
-            if (seenDate > lastAppUpdatedTime) {
-                counter++;
+        } else if (scope == THIS_APP_SESSION){
+            int counter = 0;
+            for (String tagFromList : sessionList) {
+                if (tagFromList.equals(tag)) {
+                    counter++;
+                }
             }
-        }
+            return numberOfTimes.check(counter);
+        } else {
+            int counter = 0;
+            for (Long seenDate : tagSeenDates) {
+                if (seenDate > lastAppUpdatedTime) {
+                    counter++;
+                }
+            }
 
-        return numberOfTimes.check(counter);
+            return numberOfTimes.check(counter);
+        }
     }
 
     /**
@@ -244,6 +259,7 @@ public class Once {
      */
     public static void markDone(String tag) {
         tagLastSeenMap.put(tag, new Date().getTime());
+        sessionList.add(tag);
         toDoSet.remove(tag);
     }
 
@@ -284,7 +300,7 @@ public class Once {
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({THIS_APP_INSTALL, THIS_APP_VERSION})
+    @IntDef({THIS_APP_INSTALL, THIS_APP_VERSION, THIS_APP_SESSION})
     public @interface Scope {
     }
 }
