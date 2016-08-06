@@ -1,5 +1,6 @@
 # http://docs.travis-ci.com/user/languages/android/
 language: android
+jdk: oraclejdk8
 
 android:
   components:
