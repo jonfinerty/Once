@@ -35,6 +35,10 @@ public class OnceTests {
     @Test
     public void unseenTags() {
         Once.clearAll();
+
+        boolean seenThisSession = Once.beenDone(Once.THIS_APP_SESSION, tagUnderTest);
+        Assert.assertFalse(seenThisSession);
+
         boolean seenThisInstall = Once.beenDone(Once.THIS_APP_INSTALL, tagUnderTest);
         Assert.assertFalse(seenThisInstall);
 
@@ -48,6 +52,9 @@ public class OnceTests {
     @Test
     public void seenTagImmediately() {
         Once.markDone(tagUnderTest);
+
+        boolean seenThisSession = Once.beenDone(Once.THIS_APP_SESSION, tagUnderTest);
+        Assert.assertTrue(seenThisSession);
 
         boolean seenThisInstall = Once.beenDone(Once.THIS_APP_INSTALL, tagUnderTest);
         Assert.assertTrue(seenThisInstall);
@@ -65,6 +72,9 @@ public class OnceTests {
 
         Once.clearDone(tagUnderTest);
 
+        boolean seenThisSession = Once.beenDone(Once.THIS_APP_SESSION, tagUnderTest);
+        Assert.assertFalse(seenThisSession);
+
         boolean seenThisInstall = Once.beenDone(Once.THIS_APP_INSTALL, tagUnderTest);
         Assert.assertFalse(seenThisInstall);
 
@@ -81,6 +91,9 @@ public class OnceTests {
 
         simulateAppUpdate();
 
+        boolean seenThisSession = Once.beenDone(Once.THIS_APP_SESSION, tagUnderTest);
+        Assert.assertTrue(seenThisSession);
+
         boolean seenThisInstall = Once.beenDone(Once.THIS_APP_INSTALL, tagUnderTest);
         Assert.assertTrue(seenThisInstall);
 
@@ -94,6 +107,9 @@ public class OnceTests {
     @Test
     public void seenTagAfterSecond() throws InterruptedException {
         Once.markDone(tagUnderTest);
+
+        boolean seenThisSession = Once.beenDone(Once.THIS_APP_SESSION, tagUnderTest);
+        Assert.assertTrue(seenThisSession);
 
         boolean seenThisInstall = Once.beenDone(Once.THIS_APP_INSTALL, tagUnderTest);
         Assert.assertTrue(seenThisInstall);
@@ -119,10 +135,12 @@ public class OnceTests {
 
         Once.clearAll();
 
+        Assert.assertFalse(Once.beenDone(Once.THIS_APP_SESSION, tag1));
         Assert.assertFalse(Once.beenDone(Once.THIS_APP_INSTALL, tag1));
         Assert.assertFalse(Once.beenDone(Once.THIS_APP_VERSION, tag1));
         Assert.assertFalse(Once.beenDone(1000L, tag1));
 
+        Assert.assertFalse(Once.beenDone(Once.THIS_APP_SESSION, tag2));
         Assert.assertFalse(Once.beenDone(Once.THIS_APP_INSTALL, tag2));
         Assert.assertFalse(Once.beenDone(Once.THIS_APP_VERSION, tag2));
         Assert.assertFalse(Once.beenDone(1000L, tag2));
@@ -151,6 +169,25 @@ public class OnceTests {
 
         Assert.assertTrue(Once.needToDo(tag));
         Once.markDone(tag);
+
+        Once.toDo(tag);
+        Assert.assertTrue(Once.needToDo(tag));
+    }
+
+    @Test
+    public void todoThisSession() {
+        String tag = "to do this session task";
+
+        Once.toDo(Once.THIS_APP_SESSION, tag);
+        Assert.assertTrue(Once.needToDo(tag));
+        Assert.assertFalse(Once.beenDone(tag));
+
+        Once.markDone(tag);
+        Assert.assertFalse(Once.needToDo(tag));
+        Assert.assertTrue(Once.beenDone(tag));
+
+        Once.toDo(Once.THIS_APP_SESSION, tag);
+        Assert.assertFalse(Once.needToDo(tag));
 
         Once.toDo(tag);
         Assert.assertTrue(Once.needToDo(tag));
