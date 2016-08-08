@@ -271,7 +271,7 @@ public class Once {
      */
     public static void clearDone(String tag) {
         tagLastSeenMap.remove(tag);
-        sessionList.clear();
+        sessionList.remove(tag);
     }
 
     /**
