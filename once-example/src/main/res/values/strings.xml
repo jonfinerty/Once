@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Once Example</string>
 
+    <string name="per_session_button">Once per session button</string>
     <string name="per_install_button">Once per install button</string>
     <string name="per_version_button">Once per version button</string>
     <string name="per_minute_button">Once per minute button</string>

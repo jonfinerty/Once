@@ -1,11 +1,12 @@
 # http://docs.travis-ci.com/user/languages/android/
 language: android
+jdk: oraclejdk8
 
 android:
   components:
     - tools
-    - build-tools-23.0.3
-    - android-23
+    - build-tools-24.0.1
+    - android-24
     - extra-android-m2repository
 
 script: ./gradlew testDebug

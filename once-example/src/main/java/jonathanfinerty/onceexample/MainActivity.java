@@ -19,6 +19,7 @@ import static jonathanfinerty.once.Once.markDone;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String SHOW_NEW_SESSION_DIALOG = "NewSessionDialog";
     private static final String SHOW_FRESH_INSTALL_DIALOG = "FreshInstallDialog";
     private static final String SHOW_NEW_VERSION_DIALOG = "NewVersionDialog";
     private static final String SHOW_MINUTE_DIALOG = "OncePerMinuteDialog";
@@ -30,6 +31,17 @@ public class MainActivity extends AppCompatActivity {
         Once.markDone("Application Launched");
 
         setContentView(R.layout.activity_main);
+
+        Button oncePerSessionButton = (Button) findViewById(R.id.once_per_session_button);
+        oncePerSessionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!beenDone(Once.THIS_APP_SESSION, SHOW_NEW_SESSION_DIALOG)) {
+                    showDialog("This dialog should only appear once per app session");
+                    markDone(SHOW_NEW_SESSION_DIALOG);
+                }
+            }
+        });
 
         Button oncePerInstallButton = (Button) findViewById(R.id.once_per_install_button);
         oncePerInstallButton.setOnClickListener(new View.OnClickListener() {
