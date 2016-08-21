@@ -50,6 +50,11 @@ Your app operations can also be rate-limited by time spans. So for example if yo
 if (!Once.beenDone(TimeUnit.HOURS, 1, phonedHome) { ... }
 ```
 
+If checking by time bounds is not enough you can manually get the `Date` of last time a tag was marked done by:
+```java
+Date lastDone = Once.lastDone(brushedTeeth);
+```
+This will return null if the tag has never been marked as done.
 
 ### Marking something as _to do_
 
@@ -109,7 +114,7 @@ Add a library dependency to your app module's `build.gradle`:
 
 ```
 dependencies {
-    compile 'com.jonathanfinerty.once:once:1.1.1'
+    compile 'com.jonathanfinerty.once:once:1.2.1'
 }
 ```
 

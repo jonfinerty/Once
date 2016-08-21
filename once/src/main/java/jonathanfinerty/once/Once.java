@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.support.annotation.IntDef;
+import android.support.annotation.Nullable;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -99,6 +100,16 @@ public class Once {
         return toDoSet.contains(tag);
     }
 
+    @Nullable
+    public static Date lastDone(String tag) {
+        List<Long> lastSeenTimeStamps = tagLastSeenMap.get(tag);
+        if (lastSeenTimeStamps.isEmpty()) {
+            return null;
+        }
+        long lastTimestamp = lastSeenTimeStamps.get(lastSeenTimeStamps.size() - 1);
+        return new Date(lastTimestamp);
+    }
+
     /**
      * Checks if a tag has been marked done, ever.
      * <p>
@@ -161,7 +172,7 @@ public class Once {
         //noinspection SimplifiableIfStatement
         if (scope == THIS_APP_INSTALL) {
             return numberOfTimes.check(tagSeenDates.size());
-        } else if (scope == THIS_APP_SESSION){
+        } else if (scope == THIS_APP_SESSION) {
             int counter = 0;
             for (String tagFromList : sessionList) {
                 if (tagFromList.equals(tag)) {
