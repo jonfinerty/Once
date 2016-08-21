@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 import static jonathanfinerty.once.Amount.exactly;
 
+@SuppressWarnings("ConstantConditions")
 @RunWith(TestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 public class OnceTests {
@@ -299,6 +300,30 @@ public class OnceTests {
 
         Assert.assertTrue(Once.beenDone(TimeUnit.SECONDS, 3, tagUnderTest, exactly(2)));
         Assert.assertTrue(Once.beenDone(TimeUnit.SECONDS, 1, tagUnderTest, exactly(1)));
+    }
+
+    @Test
+    public void lastDoneWhenNeverDone() {
+        Date lastDoneDate = Once.lastDone(tagUnderTest);
+        Assert.assertNull(lastDoneDate);
+    }
+
+    @Test
+    public void lastDone() {
+        Once.markDone(tagUnderTest);
+        Date expectedDate = new Date();
+        Date lastDoneDate = Once.lastDone(tagUnderTest);
+        Assert.assertTrue((lastDoneDate.getTime() - expectedDate.getTime()) < 10);
+    }
+
+    @Test
+    public void lastDoneMultipleDates() throws InterruptedException {
+        Once.markDone(tagUnderTest);
+        Thread.sleep(100);
+        Once.markDone(tagUnderTest);
+        Date expectedDate = new Date();
+        Date lastDoneDate = Once.lastDone(tagUnderTest);
+        Assert.assertTrue((lastDoneDate.getTime() - expectedDate.getTime()) < 10);
     }
 
     private void simulateAppUpdate() {
