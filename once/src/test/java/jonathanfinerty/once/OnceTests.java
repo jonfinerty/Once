@@ -1,7 +1,5 @@
 package jonathanfinerty.once;
 
-import android.content.pm.PackageInfo;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -10,12 +8,12 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
-import org.robolectric.res.builder.RobolectricPackageManager;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import static jonathanfinerty.once.Amount.exactly;
+import static jonathanfinerty.once.TestUtils.simulateAppUpdate;
 
 @SuppressWarnings("ConstantConditions")
 @RunWith(RobolectricTestRunner.class)
@@ -149,96 +147,6 @@ public class OnceTests {
     }
 
     @Test
-    public void todo() {
-        String task1 = "todo task";
-        Assert.assertFalse(Once.needToDo(task1));
-        Assert.assertFalse(Once.beenDone(task1));
-
-        Once.toDo(task1);
-        Assert.assertTrue(Once.needToDo(task1));
-        Assert.assertFalse(Once.beenDone(task1));
-
-        Once.markDone(task1);
-        Assert.assertFalse(Once.needToDo(task1));
-        Assert.assertTrue(Once.beenDone(task1));
-        Assert.assertTrue(Once.beenDone(TimeUnit.SECONDS, 1, task1));
-    }
-
-    @Test
-    public void repeatingToDos() {
-        String tag = "repeating to do task";
-        Once.toDo(tag);
-
-        Assert.assertTrue(Once.needToDo(tag));
-        Once.markDone(tag);
-
-        Once.toDo(tag);
-        Assert.assertTrue(Once.needToDo(tag));
-    }
-
-    @Test
-    public void todoThisSession() {
-        String tag = "to do this session task";
-
-        Once.toDo(Once.THIS_APP_SESSION, tag);
-        Assert.assertTrue(Once.needToDo(tag));
-        Assert.assertFalse(Once.beenDone(tag));
-
-        Once.markDone(tag);
-        Assert.assertFalse(Once.needToDo(tag));
-        Assert.assertTrue(Once.beenDone(tag));
-
-        Once.toDo(Once.THIS_APP_SESSION, tag);
-        Assert.assertFalse(Once.needToDo(tag));
-
-        Once.toDo(tag);
-        Assert.assertTrue(Once.needToDo(tag));
-    }
-
-    @Test
-    public void todoThisInstall() {
-        String tag = "to do this install task";
-
-        Once.toDo(Once.THIS_APP_INSTALL, tag);
-        Assert.assertTrue(Once.needToDo(tag));
-        Assert.assertFalse(Once.beenDone(tag));
-
-        Once.markDone(tag);
-        Assert.assertFalse(Once.needToDo(tag));
-        Assert.assertTrue(Once.beenDone(tag));
-
-        Once.toDo(Once.THIS_APP_INSTALL, tag);
-        Assert.assertFalse(Once.needToDo(tag));
-
-        Once.toDo(tag);
-        Assert.assertTrue(Once.needToDo(tag));
-    }
-
-    @Test
-    public void todoThisAppVersion() {
-        String tag = "todo this app version task";
-
-        Once.toDo(Once.THIS_APP_VERSION, tag);
-        Assert.assertTrue(Once.needToDo(tag));
-        Assert.assertFalse(Once.beenDone(tag));
-
-        Once.markDone(tag);
-        Assert.assertFalse(Once.needToDo(tag));
-        Assert.assertTrue(Once.beenDone(tag));
-
-        Once.toDo(Once.THIS_APP_VERSION, tag);
-        Assert.assertFalse(Once.needToDo(tag));
-
-        simulateAppUpdate();
-
-        Once.toDo(Once.THIS_APP_VERSION, tag);
-        Assert.assertTrue(Once.needToDo(tag));
-
-        Once.toDo(tag);
-        Assert.assertTrue(Once.needToDo(tag));
-    }
-
-    @Test
     public void emptyTag() {
         String emptyTag = "";
         Assert.assertFalse(Once.beenDone(emptyTag));
@@ -325,15 +233,6 @@ public class OnceTests {
         Date expectedDate = new Date();
         Date lastDoneDate = Once.lastDone(tagUnderTest);
         Assert.assertTrue((lastDoneDate.getTime() - expectedDate.getTime()) < 10);
-    }
-
-    private void simulateAppUpdate() {
-        RobolectricPackageManager rpm = RuntimeEnvironment.getRobolectricPackageManager();
-        PackageInfo packageInfo = new PackageInfo();
-        packageInfo.packageName = RuntimeEnvironment.application.getPackageName();
-        packageInfo.lastUpdateTime = new Date().getTime();
-        rpm.addPackage(packageInfo);
-        Once.initialise(RuntimeEnvironment.application);
     }
 
 }
