@@ -20,7 +20,7 @@ class PersistedSet {
 
     private final AsyncSharedPreferenceLoader preferenceLoader;
 
-    public PersistedSet(Context context, String setName) {
+    PersistedSet(Context context, String setName) {
         String preferencesName = "PersistedSet".concat(setName);
         preferenceLoader = new AsyncSharedPreferenceLoader(context, preferencesName);
     }
@@ -38,20 +38,20 @@ class PersistedSet {
         }
     }
 
-    public void put(String tag) {
+    void put(String tag) {
         waitForLoad();
 
         set.add(tag);
         updatePreferences();
     }
 
-    public boolean contains(String tag) {
+    boolean contains(String tag) {
         waitForLoad();
 
         return set.contains(tag);
     }
 
-    public void remove(String tag) {
+    void remove(String tag) {
         waitForLoad();
 
         set.remove(tag);

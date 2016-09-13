@@ -17,12 +17,12 @@ class AsyncSharedPreferenceLoader {
         }
     };
 
-    public AsyncSharedPreferenceLoader(Context context, String name) {
+    AsyncSharedPreferenceLoader(Context context, String name) {
         this.context = context;
         asyncTask.execute(name);
     }
 
-    public SharedPreferences get() {
+    SharedPreferences get() {
         try {
             return asyncTask.get();
         } catch (InterruptedException | ExecutionException ignored) {

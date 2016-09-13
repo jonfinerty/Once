@@ -3,15 +3,17 @@ package jonathanfinerty.once;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import org.junit.Assert;
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import static jonathanfinerty.once.Amount.exactly;
 
-@RunWith(TestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 public class BackwardsCompatibilityTests {
 

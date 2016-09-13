@@ -18,7 +18,7 @@ class PersistedMap {
     private final Map<String, List<Long>> map = new ConcurrentHashMap<>();
     private final AsyncSharedPreferenceLoader preferenceLoader;
 
-    public PersistedMap(Context context, String mapName) {
+    PersistedMap(Context context, String mapName) {
         String preferencesName = "PersistedMap".concat(mapName);
         preferenceLoader = new AsyncSharedPreferenceLoader(context, preferencesName);
     }
@@ -55,7 +55,7 @@ class PersistedMap {
     }
 
     @NonNull
-    public List<Long> get(String tag) {
+    List<Long> get(String tag) {
         waitForLoad();
 
         List<Long> longs = map.get(tag);
@@ -65,7 +65,7 @@ class PersistedMap {
         return longs;
     }
 
-    public void put(String tag, long timeSeen) {
+    void put(String tag, long timeSeen) {
         waitForLoad();
 
         List<Long> lastSeenTimeStamps = map.get(tag);
@@ -80,7 +80,7 @@ class PersistedMap {
         edit.apply();
     }
 
-    public void remove(String tag) {
+    void remove(String tag) {
         waitForLoad();
 
         map.remove(tag);

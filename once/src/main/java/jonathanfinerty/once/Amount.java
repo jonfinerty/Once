@@ -1,5 +1,6 @@
 package jonathanfinerty.once;
 
+@SuppressWarnings("WeakerAccess")
 public class Amount {
 
     public static CountChecker exactly(final int numberOfTimes) {
@@ -20,8 +21,7 @@ public class Amount {
         };
     }
 
-    public
-    static CountChecker lessThan(final int numberOfTimes) {
+    public static CountChecker lessThan(final int numberOfTimes) {
         return new CountChecker() {
             @Override
             public boolean check(int count) {

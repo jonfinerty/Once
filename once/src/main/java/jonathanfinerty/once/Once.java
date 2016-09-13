@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 import static jonathanfinerty.once.Amount.moreThan;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class Once {
 
     public static final int THIS_APP_INSTALL = 0;
@@ -37,13 +38,8 @@ public class Once {
      * @param context Application context
      */
     public static void initialise(Context context) {
-        if (tagLastSeenMap == null) {
-            tagLastSeenMap = new PersistedMap(context, "TagLastSeenMap");
-        }
-
-        if (toDoSet == null) {
-            toDoSet = new PersistedSet(context, "ToDoSet");
-        }
+        tagLastSeenMap = new PersistedMap(context, "TagLastSeenMap");
+        toDoSet = new PersistedSet(context, "ToDoSet");
 
         if (sessionList == null) {
             sessionList = new ArrayList<>();
