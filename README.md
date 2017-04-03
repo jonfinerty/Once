@@ -114,7 +114,7 @@ Add a library dependency to your app module's `build.gradle`:
 
 ```
 dependencies {
-    compile 'com.jonathanfinerty.once:once:1.2.1'
+    compile 'com.jonathanfinerty.once:once:1.2.2'
 }
 ```
 
@@ -133,7 +133,7 @@ Pull requests and github issues are more than welcome and you can get in touch w
 ## License
 
 ```
-Copyright 2016 Jon Finerty
+Copyright 2017 Jon Finerty
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

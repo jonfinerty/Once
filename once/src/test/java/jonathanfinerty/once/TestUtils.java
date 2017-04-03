@@ -7,7 +7,7 @@ import org.robolectric.res.builder.RobolectricPackageManager;
 
 import java.util.Date;
 
-public class TestUtils {
+class TestUtils {
 
     static void simulateAppUpdate() {
         RobolectricPackageManager rpm = RuntimeEnvironment.getRobolectricPackageManager();
