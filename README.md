@@ -45,7 +45,7 @@ if (!Once.beenDone(Once.THIS_APP_INSTALL, showAppTour)) {
 }
 ```
 
-Your app operations can also be rate-limited by time spans. So for example if you only want to phone back to your a maximum of server once per hour, you'd do the following: 
+Your app operations can also be rate-limited by time spans. So for example if you only want to phone back to your server a maximum of once per hour, you'd do the following: 
 ```java
 if (!Once.beenDone(TimeUnit.HOURS, 1, phonedHome) { ... }
 ```
