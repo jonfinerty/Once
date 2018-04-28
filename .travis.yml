@@ -9,4 +9,4 @@ android:
     - android-26
     - extra-android-m2repository
 
-script: ./gradlew testDebug
+script: ./gradlew lint test
