@@ -3,7 +3,7 @@
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Once-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2206)
 [![Build Status](https://travis-ci.org/jonfinerty/Once.svg?branch=master)](https://travis-ci.org/jonfinerty/Once)
 
-A small Android library to manage one-off operations for API 9 and higher.
+A small Android library to manage one-off operations for API 14 and higher.
 
 ----
 
@@ -133,7 +133,7 @@ Pull requests and github issues are more than welcome and you can get in touch w
 ## License
 
 ```
-Copyright 2017 Jon Finerty
+Copyright 2018 Jon Finerty
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

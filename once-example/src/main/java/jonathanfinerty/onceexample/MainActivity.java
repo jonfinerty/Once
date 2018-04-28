@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        Button oncePerSessionButton = (Button) findViewById(R.id.once_per_session_button);
+        Button oncePerSessionButton = findViewById(R.id.once_per_session_button);
         oncePerSessionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button oncePerInstallButton = (Button) findViewById(R.id.once_per_install_button);
+        Button oncePerInstallButton = findViewById(R.id.once_per_install_button);
         oncePerInstallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button oncePerVersionButton = (Button) findViewById(R.id.once_per_version_button);
+        Button oncePerVersionButton = findViewById(R.id.once_per_version_button);
         oncePerVersionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button oncePerMinuteButton = (Button) findViewById(R.id.once_per_minute_button);
+        Button oncePerMinuteButton = findViewById(R.id.once_per_minute_button);
         oncePerMinuteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button oncePerSecondButton = (Button) findViewById(R.id.once_per_second_button);
+        Button oncePerSecondButton = findViewById(R.id.once_per_second_button);
         oncePerSecondButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button oncePerThreePressesButton = (Button) findViewById(R.id.three_presses_button);
+        Button oncePerThreePressesButton = findViewById(R.id.three_presses_button);
         oncePerThreePressesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button resetButton = (Button) findViewById(R.id.reset_all_button);
+        Button resetButton = findViewById(R.id.reset_all_button);
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
