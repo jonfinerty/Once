@@ -165,26 +165,29 @@ public class Once {
             return false;
         }
 
-        //noinspection SimplifiableIfStatement
-        if (scope == THIS_APP_INSTALL) {
-            return numberOfTimes.check(tagSeenDates.size());
-        } else if (scope == THIS_APP_SESSION) {
-            int counter = 0;
-            for (String tagFromList : sessionList) {
-                if (tagFromList.equals(tag)) {
-                    counter++;
+        switch (scope) {
+            case THIS_APP_INSTALL:
+                return numberOfTimes.check(tagSeenDates.size());
+            case THIS_APP_SESSION: {
+                int counter = 0;
+                for (String tagFromList : sessionList) {
+                    if (tagFromList.equals(tag)) {
+                        counter++;
+                    }
                 }
+                return numberOfTimes.check(counter);
             }
-            return numberOfTimes.check(counter);
-        } else {
-            int counter = 0;
-            for (Long seenDate : tagSeenDates) {
-                if (seenDate > lastAppUpdatedTime) {
-                    counter++;
+            case THIS_APP_VERSION:
+            default: {
+                int counter = 0;
+                for (Long seenDate : tagSeenDates) {
+                    if (seenDate > lastAppUpdatedTime) {
+                        counter++;
+                    }
                 }
-            }
 
-            return numberOfTimes.check(counter);
+                return numberOfTimes.check(counter);
+            }
         }
     }
 
