@@ -44,7 +44,7 @@ public class Once {
     }
 
     /**
-     * Same as previous method, but with use of shared prefs async task's executor.
+     * Initialise using shared prefs async task's executor.
      *
      * @param context Application context
      * @param executor Executor executor for shared prefs async task
