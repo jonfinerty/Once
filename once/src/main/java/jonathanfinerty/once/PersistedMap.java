@@ -3,12 +3,14 @@ package jonathanfinerty.once;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
 
 class PersistedMap {
 
@@ -18,9 +20,13 @@ class PersistedMap {
     private final Map<String, List<Long>> map = new ConcurrentHashMap<>();
     private final AsyncSharedPreferenceLoader preferenceLoader;
 
-    PersistedMap(Context context, String mapName) {
+    PersistedMap(@NonNull Context context, @NonNull String mapName) {
+        this(context, null, mapName);
+    }
+
+    PersistedMap(@NonNull Context context, @Nullable Executor executor, @NonNull String mapName) {
         String preferencesName = "PersistedMap".concat(mapName);
-        preferenceLoader = new AsyncSharedPreferenceLoader(context, preferencesName);
+        preferenceLoader = new AsyncSharedPreferenceLoader(context, executor, preferencesName);
     }
 
     private void waitForLoad() {

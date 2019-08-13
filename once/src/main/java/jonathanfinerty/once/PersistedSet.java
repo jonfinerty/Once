@@ -2,9 +2,12 @@ package jonathanfinerty.once;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.Executor;
 
 class PersistedSet {
 
@@ -15,9 +18,13 @@ class PersistedSet {
 
     private final AsyncSharedPreferenceLoader preferenceLoader;
 
-    PersistedSet(Context context, String setName) {
+    PersistedSet(@NonNull Context context, @NonNull String setName) {
+        this(context, null, setName);
+    }
+
+    PersistedSet(@NonNull Context context, @Nullable Executor executor, @NonNull String setName) {
         String preferencesName = "PersistedSet".concat(setName);
-        preferenceLoader = new AsyncSharedPreferenceLoader(context, preferencesName);
+        preferenceLoader = new AsyncSharedPreferenceLoader(context, executor, preferencesName);
     }
 
     private void waitForLoad() {

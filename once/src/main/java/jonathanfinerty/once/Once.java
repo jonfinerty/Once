@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.lang.annotation.Retention;
@@ -11,6 +12,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 import static jonathanfinerty.once.Amount.moreThan;
@@ -37,9 +39,19 @@ public class Once {
      *
      * @param context Application context
      */
-    public static void initialise(Context context) {
-        tagLastSeenMap = new PersistedMap(context, "TagLastSeenMap");
-        toDoSet = new PersistedSet(context, "ToDoSet");
+    public static void initialise(@NonNull Context context) {
+        initialise(context, null);
+    }
+
+    /**
+     * Same as previous method, but with use of shared prefs async task's executor.
+     *
+     * @param context Application context
+     * @param executor Executor executor for shared prefs async task
+     */
+    public static void initialise(@NonNull Context context, @Nullable Executor executor) {
+        tagLastSeenMap = new PersistedMap(context, executor, "TagLastSeenMap");
+        toDoSet = new PersistedSet(context, executor, "ToDoSet");
 
         if (sessionList == null) {
             sessionList = new ArrayList<>();

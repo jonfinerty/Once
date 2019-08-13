@@ -3,17 +3,28 @@ package jonathanfinerty.once;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 
 class AsyncSharedPreferenceLoader {
 
     private final AsyncTask<String, Void, SharedPreferences> asyncTask;
 
-    AsyncSharedPreferenceLoader(Context context, String name) {
+    AsyncSharedPreferenceLoader(@NonNull Context context, @NonNull String name) {
+        this(context, null, name);
+    }
+
+    AsyncSharedPreferenceLoader(@NonNull Context context, @Nullable Executor executor, @NonNull String name) {
         asyncTask = new SharedPreferencesAsyncTask(context);
-        asyncTask.execute(name);
+        if (executor != null) {
+            asyncTask.executeOnExecutor(executor, name);
+        } else {
+            asyncTask.execute(name);
+        }
     }
 
     SharedPreferences get() {
