@@ -6,7 +6,6 @@ version = "1.2.2"
 
 android {
     compileSdkVersion 29
-    buildToolsVersion '27.0.3'
 
     lintOptions {
         warningsAsErrors true

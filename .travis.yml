@@ -5,8 +5,7 @@ jdk: oraclejdk8
 android:
   components:
     - tools
-    - build-tools-27.0.3
-    - android-26
+    - android-29
     - extra-android-m2repository
 
 script: ./gradlew lint test
