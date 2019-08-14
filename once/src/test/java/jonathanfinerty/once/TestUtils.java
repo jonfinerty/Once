@@ -1,21 +1,26 @@
 package jonathanfinerty.once;
 
+import android.content.Context;
 import android.content.pm.PackageInfo;
 
-import org.robolectric.RuntimeEnvironment;
-import org.robolectric.res.builder.RobolectricPackageManager;
+import androidx.test.core.app.ApplicationProvider;
+
+import org.robolectric.shadows.ShadowPackageManager;
 
 import java.util.Date;
+
+import static org.robolectric.Shadows.shadowOf;
 
 class TestUtils {
 
     static void simulateAppUpdate() {
-        RobolectricPackageManager rpm = RuntimeEnvironment.getRobolectricPackageManager();
+        Context applicationContext = ApplicationProvider.getApplicationContext();
+        ShadowPackageManager spm = shadowOf(applicationContext.getPackageManager());
         PackageInfo packageInfo = new PackageInfo();
-        packageInfo.packageName = RuntimeEnvironment.application.getPackageName();
+        packageInfo.packageName = applicationContext.getPackageName();
         packageInfo.lastUpdateTime = new Date().getTime();
-        rpm.addPackage(packageInfo);
-        Once.initialise(RuntimeEnvironment.application);
+        spm.installPackage(packageInfo);
+        Once.initialise(applicationContext);
     }
 
 }

@@ -3,28 +3,30 @@ package jonathanfinerty.once;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.test.core.app.ApplicationProvider;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import static jonathanfinerty.once.Amount.exactly;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21)
+@Config(sdk=28)
 public class BackwardsCompatibilityTests {
 
     @Test
     public void backwardsCompatibilityWithPre1Versions() {
         String tag = "version 0.5 tag";
 
-        SharedPreferences sharedPreferences = RuntimeEnvironment.application.getSharedPreferences(PersistedMap.class.getSimpleName() + "TagLastSeenMap", Context.MODE_PRIVATE);
+        Context applicationContext = ApplicationProvider.getApplicationContext();
+        SharedPreferences sharedPreferences = applicationContext.getSharedPreferences(PersistedMap.class.getSimpleName() + "TagLastSeenMap", Context.MODE_PRIVATE);
         sharedPreferences.edit().putLong(tag, 1234L).apply();
 
-        Once.initialise(RuntimeEnvironment.application);
+        Once.initialise(applicationContext);
 
         Once.markDone(tag);
 
