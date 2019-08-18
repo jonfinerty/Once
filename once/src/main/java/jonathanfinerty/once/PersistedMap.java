@@ -65,7 +65,7 @@ class PersistedMap {
         return longs;
     }
 
-    void put(String tag, long timeSeen) {
+    synchronized void put(String tag, long timeSeen) {
         waitForLoad();
 
         List<Long> lastSeenTimeStamps = map.get(tag);

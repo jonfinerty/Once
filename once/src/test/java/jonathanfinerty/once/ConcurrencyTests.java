@@ -31,18 +31,28 @@ public class ConcurrencyTests {
     }
 
     @Test
-    public void concurrentMarkDone() throws InterruptedException {
-        boolean success = testConcurrency(new Runnable() {
+    public void concurrentMarkDone() throws Throwable {
+
+        testConcurrency(new Runnable() {
             @Override
             public void run() {
                 Once.markDone("tag under test");
             }
         });
-
-        Assert.assertTrue(success);
     }
 
-    private boolean testConcurrency(Runnable functionUnderTest) throws InterruptedException {
+    @Test
+    public void concurrentToDo() throws Throwable {
+
+        testConcurrency(new Runnable() {
+            @Override
+            public void run() {
+                Once.toDo("tag under test");
+            }
+        });
+    }
+
+    private void testConcurrency(Runnable functionUnderTest) throws Throwable {
         ExceptionTrackingThreadFactory threadFactory = new ExceptionTrackingThreadFactory();
         ExecutorService exec = Executors.newFixedThreadPool(16, threadFactory);
         for (int i = 0; i < 10000; i++) {
@@ -50,14 +60,16 @@ public class ConcurrencyTests {
         }
         exec.shutdown();
         exec.awaitTermination(10, TimeUnit.SECONDS);
-        return !threadFactory.ExceptionThrown();
+        if (threadFactory.getLastExceptionThrown() != null) {
+            throw threadFactory.getLastExceptionThrown();
+        }
     }
 
     public final class ExceptionTrackingThreadFactory implements ThreadFactory {
-        private boolean threadThrewException;
+        private Throwable lastExceptionThrown;
 
-        public boolean ExceptionThrown() {
-            return threadThrewException;
+        public Throwable getLastExceptionThrown() {
+            return lastExceptionThrown;
         }
 
         @Override
@@ -66,7 +78,7 @@ public class ConcurrencyTests {
             t.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
                 @Override
                 public void uncaughtException(@NonNull Thread thread, @NonNull Throwable throwable) {
-                    threadThrewException = true;
+                    lastExceptionThrown = throwable;
                 }
             });
             return t;
