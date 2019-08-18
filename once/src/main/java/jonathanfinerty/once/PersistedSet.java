@@ -11,45 +11,30 @@ class PersistedSet {
     private static final String STRING_SET_KEY = "PersistedSetValues";
 
     private SharedPreferences preferences;
-    private Set<String> set = new HashSet<>();
+    private Set<String> set;
 
-    private final AsyncSharedPreferenceLoader preferenceLoader;
 
     PersistedSet(Context context, String setName) {
         String preferencesName = "PersistedSet".concat(setName);
-        preferenceLoader = new AsyncSharedPreferenceLoader(context, preferencesName);
-    }
-
-    private void waitForLoad() {
-        if (preferences == null) {
-            preferences = preferenceLoader.get();
-            set = preferences.getStringSet(STRING_SET_KEY, new HashSet<String>());
-        }
+        preferences = context.getSharedPreferences(preferencesName, Context.MODE_PRIVATE);
+        set = preferences.getStringSet(STRING_SET_KEY, new HashSet<String>());
     }
 
     void put(String tag) {
-        waitForLoad();
-
         set.add(tag);
         updatePreferences();
     }
 
     boolean contains(String tag) {
-        waitForLoad();
-
         return set.contains(tag);
     }
 
     void remove(String tag) {
-        waitForLoad();
-
         set.remove(tag);
         updatePreferences();
     }
 
-    public void clear() {
-        waitForLoad();
-
+    void clear() {
         set.clear();
         updatePreferences();
     }

@@ -16,19 +16,10 @@ class PersistedMap {
 
     private SharedPreferences preferences;
     private final Map<String, List<Long>> map = new ConcurrentHashMap<>();
-    private final AsyncSharedPreferenceLoader preferenceLoader;
 
     PersistedMap(Context context, String mapName) {
         String preferencesName = "PersistedMap".concat(mapName);
-        preferenceLoader = new AsyncSharedPreferenceLoader(context, preferencesName);
-    }
-
-    private void waitForLoad() {
-        if (preferences != null) {
-            return;
-        }
-
-        preferences = preferenceLoader.get();
+        preferences = context.getSharedPreferences(preferencesName, Context.MODE_PRIVATE);
         Map<String, ?> allPreferences = preferences.getAll();
 
         for (String key : allPreferences.keySet()) {
@@ -56,8 +47,6 @@ class PersistedMap {
 
     @NonNull
     List<Long> get(String tag) {
-        waitForLoad();
-
         List<Long> longs = map.get(tag);
         if (longs == null) {
             return Collections.emptyList();
@@ -66,8 +55,6 @@ class PersistedMap {
     }
 
     synchronized void put(String tag, long timeSeen) {
-        waitForLoad();
-
         List<Long> lastSeenTimeStamps = map.get(tag);
         if (lastSeenTimeStamps == null) {
             lastSeenTimeStamps = new ArrayList<>(1);
@@ -81,17 +68,13 @@ class PersistedMap {
     }
 
     void remove(String tag) {
-        waitForLoad();
-
         map.remove(tag);
         SharedPreferences.Editor edit = preferences.edit();
         edit.remove(tag);
         edit.apply();
     }
 
-    public void clear() {
-        waitForLoad();
-
+    void clear() {
         map.clear();
         SharedPreferences.Editor edit = preferences.edit();
         edit.clear();
