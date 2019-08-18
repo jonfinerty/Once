@@ -1,12 +1,13 @@
 package jonathanfinerty.once;
 
+import androidx.test.core.app.ApplicationProvider;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import java.util.Date;
@@ -24,7 +25,7 @@ public class OnceTests {
 
     @Before
     public void Setup() {
-        Once.initialise(RuntimeEnvironment.application);
+        Once.initialise(ApplicationProvider.getApplicationContext());
     }
 
     @After
