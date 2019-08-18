@@ -1,13 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 29
 
     defaultConfig {
         applicationId "jonathanfinerty.onceexample"
         minSdkVersion 14
-        targetSdkVersion 26
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
     }
@@ -48,6 +47,6 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation project(':once')
+    implementation 'androidx.appcompat:appcompat:1.0.2'
 }

@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import static jonathanfinerty.once.TestUtils.simulateAppUpdate;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21)
+@Config(sdk=28)
 public class ToDoTests {
 
     @Before

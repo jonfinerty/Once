@@ -17,7 +17,7 @@ import static jonathanfinerty.once.TestUtils.simulateAppUpdate;
 
 @SuppressWarnings("ConstantConditions")
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21)
+@Config(sdk=28)
 public class OnceTests {
 
     private static final String tagUnderTest = "testTag";
