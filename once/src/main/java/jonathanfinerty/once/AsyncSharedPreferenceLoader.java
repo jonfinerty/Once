@@ -3,6 +3,7 @@ package jonathanfinerty.once;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.ExecutionException;
@@ -13,7 +14,7 @@ class AsyncSharedPreferenceLoader {
 
     AsyncSharedPreferenceLoader(Context context, String name) {
         asyncTask = new SharedPreferencesAsyncTask(context);
-        asyncTask.execute(name);
+        asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, name);
     }
 
     SharedPreferences get() {
