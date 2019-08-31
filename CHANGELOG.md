@@ -17,4 +17,4 @@
 
 ## [1.2.2] - 2017-04-30
 
-- Prehistory
+- previous versions TBC
