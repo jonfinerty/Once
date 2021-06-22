@@ -17,7 +17,7 @@ class PersistedSet {
     PersistedSet(Context context, String setName) {
         String preferencesName = "PersistedSet".concat(setName);
         preferences = context.getSharedPreferences(preferencesName, Context.MODE_PRIVATE);
-        set = preferences.getStringSet(STRING_SET_KEY, new HashSet<String>());
+        set = new HashSet<>(preferences.getStringSet(STRING_SET_KEY, new HashSet<String>()));
     }
 
     void put(String tag) {
