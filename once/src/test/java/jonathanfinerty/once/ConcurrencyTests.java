@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.test.core.app.ApplicationProvider;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,24 +31,12 @@ public class ConcurrencyTests {
 
     @Test
     public void concurrentMarkDone() throws Throwable {
-
-        testConcurrency(new Runnable() {
-            @Override
-            public void run() {
-                Once.markDone("tag under test");
-            }
-        });
+        testConcurrency(() -> Once.markDone("tag under test"));
     }
 
     @Test
     public void concurrentToDo() throws Throwable {
-
-        testConcurrency(new Runnable() {
-            @Override
-            public void run() {
-                Once.toDo("tag under test");
-            }
-        });
+        testConcurrency(() -> Once.toDo("tag under test"));
     }
 
     private void testConcurrency(Runnable functionUnderTest) throws Throwable {
@@ -65,7 +52,7 @@ public class ConcurrencyTests {
         }
     }
 
-    public final class ExceptionTrackingThreadFactory implements ThreadFactory {
+    public static final class ExceptionTrackingThreadFactory implements ThreadFactory {
         private Throwable lastExceptionThrown;
 
         public Throwable getLastExceptionThrown() {
@@ -75,12 +62,7 @@ public class ConcurrencyTests {
         @Override
         public Thread newThread(@NonNull Runnable runnable) {
             Thread t = new Thread(runnable);
-            t.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-                @Override
-                public void uncaughtException(@NonNull Thread thread, @NonNull Throwable throwable) {
-                    lastExceptionThrown = throwable;
-                }
-            });
+            t.setUncaughtExceptionHandler((thread, throwable) -> lastExceptionThrown = throwable);
             return t;
         }
     }

@@ -4,29 +4,14 @@ package jonathanfinerty.once;
 public class Amount {
 
     public static CountChecker exactly(final int numberOfTimes) {
-        return new CountChecker() {
-            @Override
-            public boolean check(int count) {
-                return numberOfTimes == count;
-            }
-        };
+        return count -> numberOfTimes == count;
     }
 
     public static CountChecker moreThan(final int numberOfTimes) {
-        return new CountChecker() {
-            @Override
-            public boolean check(int count) {
-                return count > numberOfTimes;
-            }
-        };
+        return count -> count > numberOfTimes;
     }
 
     public static CountChecker lessThan(final int numberOfTimes) {
-        return new CountChecker() {
-            @Override
-            public boolean check(int count) {
-                return count < numberOfTimes;
-            }
-        };
+        return count -> count < numberOfTimes;
     }
 }
