@@ -33,12 +33,11 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.annotation:annotation:1.2.0'
 
-    testImplementation 'junit:junit:4.12'
-    //noinspection GradleDependency
-    testImplementation "org.robolectric:robolectric:4.1"
-    testImplementation 'androidx.test:core:1.2.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation "org.robolectric:robolectric:4.5.1"
+    testImplementation 'androidx.test:core:1.3.0'
 }
 
 repositories {
