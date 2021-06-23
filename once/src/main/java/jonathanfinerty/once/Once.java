@@ -170,7 +170,8 @@ public class Once {
                 return numberOfTimes.check(tagSeenDates.size());
             case THIS_APP_SESSION: {
                 int counter = 0;
-                for (String tagFromList : sessionList) {
+                String[] sessionArray = sessionList.toArray(new String[0]);
+                for (String tagFromList : sessionArray) {
                     if (tagFromList.equals(tag)) {
                         counter++;
                     }

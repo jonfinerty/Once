@@ -14,7 +14,7 @@ class PersistedMap {
 
     private static final String DELIMITER = ",";
 
-    private SharedPreferences preferences;
+    private final SharedPreferences preferences;
     private final Map<String, List<Long>> map = new ConcurrentHashMap<>();
 
     PersistedMap(Context context, String mapName) {

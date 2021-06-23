@@ -10,8 +10,8 @@ class PersistedSet {
 
     private static final String STRING_SET_KEY = "PersistedSetValues";
 
-    private SharedPreferences preferences;
-    private Set<String> set;
+    private final SharedPreferences preferences;
+    private final Set<String> set;
 
 
     PersistedSet(Context context, String setName) {
