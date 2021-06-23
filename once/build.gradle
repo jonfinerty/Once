@@ -1,6 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: "com.jfrog.bintray"
 
 version = "1.3.0"
 
@@ -42,88 +40,4 @@ dependencies {
 
 repositories {
     mavenCentral()
-    jcenter()
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-}
-
-def siteUrl = 'https://github.com/jonfinerty/Once'
-def gitUrl = 'https://github.com/jonfinerty/Once.git'
-group = "com.jonathanfinerty.once"
-
-install {
-    repositories.mavenInstaller {
-
-        pom {
-            project {
-                packaging 'aar'
-
-                name 'A small Android library to manage one-off operations for API 14 and higher.'
-                url siteUrl
-
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'jonathanfinerty'
-                        name 'Jonathan Finerty'
-                        email 'jonathanfinerty@gmail.com'
-                    }
-                }
-
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-                }
-            }
-        }
-    }
-}
-
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    classpath += configurations.compile
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
-
-bintray {
-    Properties properties = new Properties()
-    def bintrayProperties = project.rootProject.file('bintray.properties')
-
-    if (bintrayProperties.exists()) {
-        properties.load(bintrayProperties.newDataInputStream())
-
-        user = properties.getProperty("bintray.user")
-        key = properties.getProperty("bintray.apikey")
-    }
-
-    configurations = ['archives']
-    pkg {
-        repo = "maven"
-        name = "once"
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = ["Apache-2.0"]
-        publish = true
-    }
 }
