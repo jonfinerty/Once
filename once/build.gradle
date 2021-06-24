@@ -1,7 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven-publish'
-
-version = "1.3.0"
+apply plugin: "com.vanniktech.maven.publish"
 
 android {
     compileSdkVersion 30

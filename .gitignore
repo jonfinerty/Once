@@ -7,7 +7,6 @@
 .DS_Store
 /build
 /captures
-bintray.properties
 
 *.jks
 once-example/gradle.properties

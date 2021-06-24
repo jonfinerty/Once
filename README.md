@@ -114,11 +114,11 @@ Add a library dependency to your app module's `build.gradle`:
 
 ```
 dependencies {
-    compile 'com.jonathanfinerty.once:once:1.3.0'
+    compile 'com.jonathanfinerty.once:once:1.3.1'
 }
 ```
 
-You'll need to have `jcenter()` in your list of repositories
+You'll need to have `mavenCentral()` in your list of repositories
 
 ## Example
 
@@ -133,7 +133,7 @@ Pull requests and github issues are more than welcome and you can get in touch w
 ## License
 
 ```
-Copyright 2018 Jon Finerty
+Copyright 2021 Jon Finerty
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

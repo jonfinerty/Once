@@ -2,9 +2,18 @@
 
 ## In Development
 
+## [1.3.1]
+
+### External
+
+- Publishing / Hosting changed from jcenter to mavenCentral
+- Fix session scope concurrency issue
+- Fix race condition with app shutdown
+
 ### Internal
 
-- Bump to Gradle 5.4.1 and build tools 3.5.0
+- Bump to Gradle 6.7.1 and build tools 4.2.1
+- Bump JUnit and Robolectric
 
 ## [1.3.0] - 2019-08-19
 

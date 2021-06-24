@@ -6,11 +6,19 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.1'
+        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.16.0'
     }
 }
 
 allprojects {
+    plugins.withId("com.vanniktech.maven.publish") {
+        mavenPublish {
+            sonatypeHost = "S01"
+        }
+    }
+
     repositories {
         google()
+        mavenCentral()
     }
 }
