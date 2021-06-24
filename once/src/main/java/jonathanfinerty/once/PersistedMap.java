@@ -51,7 +51,7 @@ class PersistedMap {
         if (longs == null) {
             return Collections.emptyList();
         }
-        return longs;
+        return new ArrayList<>(longs);
     }
 
     synchronized void put(String tag, long timeSeen) {
